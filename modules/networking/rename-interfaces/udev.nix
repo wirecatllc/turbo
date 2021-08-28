@@ -2,7 +2,7 @@
 
 with builtins;
 let
-  cfg = config.zhaofeng.networking.rename-interfaces;
+  cfg = config.turbo.networking.rename-interfaces;
 
   renameInterface = mac: ifname:
     "SUBSYSTEM==\"net\", ACTION==\"add\", ATTR{address}==\"${mac}\", NAME=\"${ifname}\"";

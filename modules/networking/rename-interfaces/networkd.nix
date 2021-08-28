@@ -2,7 +2,7 @@
 
 with builtins;
 let
-  cfg = config.zhaofeng.networking.rename-interfaces;
+  cfg = config.turbo.networking.rename-interfaces;
 in {
   config = lib.mkIf (cfg.enable && cfg.method == "networkd") {
     networking.useNetworkd = true;
