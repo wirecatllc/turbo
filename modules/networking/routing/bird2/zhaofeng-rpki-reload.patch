@@ -1,0 +1,80 @@
+diff --git a/nest/proto.c b/nest/proto.c
+index 6beca56d..91be286c 100644
+--- a/nest/proto.c
++++ b/nest/proto.c
+@@ -2059,3 +2059,38 @@ proto_get_named(struct symbol *sym, struct protocol *pr)
+ 
+   return p;
+ }
++
++struct bgp_stub_proto {
++  struct proto p;
++  void *cf;
++  ip_addr local_ip, remote_ip;
++  u32 local_as, remote_as;
++};
++
++void
++reload_all(void)
++{
++  log(L_INFO "Reloading all protocols.");
++  struct proto *p;
++  WALK_LIST(p, proto_list)
++  {
++    if (!p->disabled && p->proto_state == PS_UP && p->proto->class == PROTOCOL_BGP)
++    {
++	  struct bgp_stub_proto *bp = (struct bgp_stub_proto*) p;
++	  if (bp->local_as == bp->remote_as) continue;
++
++      log(L_INFO "Reloading protocol %s (local %d, peer %d).", p->name, bp->local_as, bp->remote_as);
++
++      struct channel *c;
++      WALK_LIST(c, p->channels)
++      {
++        if (channel_reloadable(c) && c->channel_state == CS_UP)
++        {
++          channel_request_reload(c);
++          // channel_request_feeding(c);
++        }
++      }
++    }
++  }
++}
++
+diff --git a/nest/protocol.h b/nest/protocol.h
+index c664c1e6..dfc0dee2 100644
+--- a/nest/protocol.h
++++ b/nest/protocol.h
+@@ -622,6 +622,7 @@ void *channel_config_new(const struct channel_class *cc, const char *name, uint
+ void *channel_config_get(const struct channel_class *cc, const char *name, uint net_type, struct proto_config *proto);
+ int channel_reconfigure(struct channel *c, struct channel_config *cf);
+ 
++void reload_all(void);
+ 
+ /* Moved from route.h to avoid dependency conflicts */
+ static inline void rte_update(struct proto *p, const net_addr *n, rte *new) { rte_update2(p->main_channel, n, new, p->main_source); }
+diff --git a/proto/rpki/packets.c b/proto/rpki/packets.c
+index 59a5efaf..2a27c662 100644
+--- a/proto/rpki/packets.c
++++ b/proto/rpki/packets.c
+@@ -21,6 +21,8 @@
+ 
+ #define RPKI_ADD_FLAG 		0b00000001
+ 
++static char rpki_first_sync = 0;
++
+ enum rpki_transmit_type {
+   RPKI_RECV 			= 0,
+   RPKI_SEND 			= 1,
+@@ -817,6 +819,11 @@ rpki_handle_end_of_data_pdu(struct rpki_cache *cache, const struct pdu_end_of_da
+   cache->last_update = current_time();
+   cache->serial_num = pdu->serial_num;
+   rpki_cache_change_state(cache, RPKI_CS_ESTABLISHED);
++
++  if (!rpki_first_sync) {
++    reload_all();
++    rpki_first_sync = 1;
++  }
+ }
+ 
+ /**

@@ -1,0 +1,68 @@
+From aff07ee7ed1136ed9879c9b6dec6875962a7610f Mon Sep 17 00:00:00 2001
+From: Simon Marsh <simon@sesa.me.uk>
+Date: Mon, 3 Jun 2019 18:28:51 +0100
+Subject: [PATCH] Add patch from JRB0001 to reload protocols on RPKI change
+
+---
+ nest/proto.c         | 24 ++++++++++++++++++++++++
+ nest/protocol.h      |  1 +
+ proto/rpki/packets.c |  2 ++
+ 3 files changed, 27 insertions(+)
+
+diff --git a/nest/proto.c b/nest/proto.c
+index d4a333d0..d6ba0266 100644
+--- a/nest/proto.c
++++ b/nest/proto.c
+@@ -1968,3 +1968,27 @@ proto_get_named(struct symbol *sym, struct protocol *pr)
+ 
+   return p;
+ }
++
++void
++reload_all(void)
++{
++  log(L_INFO "Reloading all protocols.");
++  struct proto *p;
++  WALK_LIST(p, proto_list)
++  {
++    if (!p->disabled && p->proto_state == PS_UP)
++    {
++      log(L_INFO "Reloading protocol %s.", p->name);
++      struct channel *c;
++      WALK_LIST(c, p->channels)
++      {
++        if (channel_reloadable(c) && c->channel_state == CS_UP)
++        {
++          channel_request_reload(c);
++          channel_request_feeding(c);
++        }
++      }
++    }
++  }
++}
++
+diff --git a/nest/protocol.h b/nest/protocol.h
+index 6c04071b..ed06561f 100644
+--- a/nest/protocol.h
++++ b/nest/protocol.h
+@@ -624,6 +624,7 @@ void *channel_config_new(const struct channel_class *cc, const char *name, uint
+ void *channel_config_get(const struct channel_class *cc, const char *name, uint net_type, struct proto_config *proto);
+ int channel_reconfigure(struct channel *c, struct channel_config *cf);
+ 
++void reload_all(void);
+ 
+ /* Moved from route.h to avoid dependency conflicts */
+ static inline void rte_update(struct proto *p, const net_addr *n, rte *new) { rte_update2(p->main_channel, n, new, p->main_source); }
+diff --git a/proto/rpki/packets.c b/proto/rpki/packets.c
+index 59a5efaf..16c1efc7 100644
+--- a/proto/rpki/packets.c
++++ b/proto/rpki/packets.c
+@@ -817,6 +817,8 @@ rpki_handle_end_of_data_pdu(struct rpki_cache *cache, const struct pdu_end_of_da
+   cache->last_update = current_time();
+   cache->serial_num = pdu->serial_num;
+   rpki_cache_change_state(cache, RPKI_CS_ESTABLISHED);
++
++  reload_all();
+ }
+ 
+ /**
