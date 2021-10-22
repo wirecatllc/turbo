@@ -70,7 +70,8 @@ in rec {
     numericId,
     iBgpAsn,
     communityAsn,
-    ownPrefixes,
+    ownPrefixes6,
+    ownPrefixes4,
     region ? null,
 
     config,
@@ -95,7 +96,8 @@ in rec {
 
     define IBGP_ASN = ${toString iBgpAsn};
     define COMMUNITY_ASN = ${toString communityAsn};
-    define OWN_PREFIXES = ${renderList ownPrefixes};
+    define OWN_PREFIXES6 = ${renderList ownPrefixes6};
+    define OWN_PREFIXES4 = ${renderList ownPrefixes4};
 
     ${renderNetworkStanza "DFZ" "v4" "v6" config}
     ${renderNetworkStanza "DN42" "dn4" "dn6" config}

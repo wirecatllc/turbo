@@ -24,11 +24,11 @@ let
   # == Sub-config files ==
   # node.conf
   nodeConf = pkgs.writeText "node.conf" (genconfig.nodeConf {
-    routerId = cfg.routerId;
-    numericId = cfg.numericId;
-    iBgpAsn = cfg.iBgpAsn;
-    communityAsn = cfg.communityAsn;
-    ownPrefixes = cfg.ownPrefixes;
+    inherit (cfg)
+      routerId numericId
+      iBgpAsn communityAsn
+      ownPrefixes6 ownPrefixes4;
+
     region = config.turbo.networking.routing.region;
     config = config;
   });
@@ -514,11 +514,20 @@ in
           The ASN used for public control communities
         '';
       };
-      ownPrefixes = mkOption {
+      ownPrefixes6 = mkOption {
+        type = types.listOf types.str;
+        example = [ "fd42:1234:5678::/48" ];
+        description = ''
+          IPv6 prefixes that we own
+
+          We expect not to receive those prefixes over eBGP.
+        '';
+      };
+      ownPrefixes4 = mkOption {
         type = types.listOf types.str;
         example = [ "1.2.3.0/24" ];
         description = ''
-          Prefixes that we own
+          IPv4 prefixes that we own
 
           We expect not to receive those prefixes over eBGP.
         '';
