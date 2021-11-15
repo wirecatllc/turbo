@@ -21,6 +21,7 @@ in
   imports = [
     ./bird2
     ./rtr
+    ./jool
   ];
 
   options = {
