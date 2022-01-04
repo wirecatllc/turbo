@@ -23,7 +23,8 @@ let
       name = "jool-${name}";
       value = {
         # https://raw.githubusercontent.com/ydahhrk/packaging/master/Jool/debian/jool-tools.jool.service
-        wantedBy = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
         description = "Jool NAT64 ${name}";
         serviceConfig = {
           Type = "oneshot";
