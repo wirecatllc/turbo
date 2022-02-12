@@ -140,8 +140,8 @@ in
     '';
 
     boot.kernel.sysctl = {
-      "net.ipv4.conf.all.forwarding" = 1;
-      "net.ipv6.conf.all.forwarding" = 1;
+      "net.ipv4.conf.all.forwarding" = mkDefault 1;
+      "net.ipv6.conf.all.forwarding" = mkDefault 1;
       "net.ipv6.route.max_size" = 262144;
     } // lib.optionalAttrs cfg.bird2.enable {
       "net.ipv4.conf.all.rp_filter" = 0;
@@ -159,7 +159,8 @@ in
     # Also set up ngtun :)
     turbo.networking.ngtun = lib.mkIf cfg.ngtun {
       node = {
-        groups = [ "routers" cfg.region ]
+        groups = [ "routers" ] 
+          ++ lib.optional (cfg.region != null) cfg.region
           ++ lib.optional (cfg.core) "routers-core";
       };
     };
