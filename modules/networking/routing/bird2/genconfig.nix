@@ -4,14 +4,9 @@ with builtins;
 let
   optionalField = arg: stanza: if arg == null || arg == "" then "" else stanza;
 
-  # Render a list
-  renderList = let 
-    recurse = l: (toString (head l)) + (
-      if 0 == length (tail l)
-      then ""
-      else ", " + recurse (tail l));
-  in
-    l: "[" + recurse l + "]";
+  # Render a list, empty list is not supported
+  # https://bird.network.cz/pipermail/bird-users/2019-September/013763.html
+  renderList = list: assert (lib.assertMsg (length list != 0) "Empty list is not supported!"); "[ ${concatStringsSep ", " list} ]";
 
   # Render address configurations for a network (DFZ, DN42)
   renderNetworkStanza = let

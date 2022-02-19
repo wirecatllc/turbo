@@ -517,6 +517,7 @@ in
       ownPrefixes6 = mkOption {
         type = types.listOf types.str;
         example = [ "fd42:1234:5678::/48" ];
+        default = [ "::/128" ];
         description = ''
           IPv6 prefixes that we own
 
@@ -526,6 +527,7 @@ in
       ownPrefixes4 = mkOption {
         type = types.listOf types.str;
         example = [ "1.2.3.0/24" ];
+        default = [ "0.0.0.0/32" ];
         description = ''
           IPv4 prefixes that we own
 
