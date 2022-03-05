@@ -285,7 +285,7 @@ in {
       kernelPackages.wireguard
     ] else [];
     environment.systemPackages = [
-      pkgs.wireguard pkgs.wireguard-tools
+      pkgs.wireguard-tools
     ];
   };
 }
