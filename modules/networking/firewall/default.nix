@@ -132,6 +132,10 @@ let
   in listToAttrs [ filter nat mangle ];
 in
 {
+  imports = [
+    ./port-forward.nix
+  ];
+
   options = {
     turbo.networking.firewall = {
       enable = mkOption {
