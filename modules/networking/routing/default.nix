@@ -22,6 +22,7 @@ in
     ./bird2
     ./rtr
     ./jool
+    ./dhcp
   ];
 
   options = {
