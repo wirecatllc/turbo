@@ -7,17 +7,17 @@ let
   genconfig = import ./genconfig.nix { inherit lib; };
 
   birdPackage = pkgs.bird2.overrideAttrs (old: {
-    src = pkgs.fetchgit {
-      url = "https://gitlab.nic.cz/labs/bird";
-      rev = "82f19ba95e421f00a8e99a866a2b8d9bbdba6cdc";
-      sha256 = "07mh41hsmkcpf6f6lnygzp6g59jma542pcqdkl54ysiqnjmi5zz1";
-    };
+    # src = pkgs.fetchgit {
+    #   url = "https://gitlab.nic.cz/labs/bird";
+    #   rev = "82f19ba95e421f00a8e99a866a2b8d9bbdba6cdc";
+    #   sha256 = "07mh41hsmkcpf6f6lnygzp6g59jma542pcqdkl54ysiqnjmi5zz1";
+    # };
     nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
       pkgs.autoreconfHook
     ];
     patches = (old.patches or []) ++ [
       #./turbo-rpki-reload.patch
-      ./zhaofeng-logging.patch
+      #./zhaofeng-logging.patch
     ];
   });
 
@@ -594,11 +594,11 @@ in
       description = "BIRD routing daemon";
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${cfg.birdPackage}/bin/bird -c /etc/bird.conf -s /run/bird2/bird.ctl";
+        ExecStart = "${cfg.birdPackage}/bin/bird -c /etc/bird.conf -s /run/bird/bird.ctl";
         ExecReload = "${cfg.birdPackage}/bin/birdc configure";
         ExecStop = "${cfg.birdPackage}/bin/birdc down";
         Restart = "always";
-        RuntimeDirectory = "bird2";
+        RuntimeDirectory = "bird";
 
         # https://gitlab.nic.cz/labs/bird/-/blob/9f24fef5e91fb4df301242ede91ee7ac1b46b8a8/sysdep/linux/syspriv.h#L57-61
         AmbientCapabilities = [
@@ -607,25 +607,6 @@ in
           "CAP_NET_BROADCAST"
           "CAP_NET_RAW"
         ];
-      };
-    };
-
-    # Socket proxy
-    #
-    # This allows bird itself to be run as non-root and create
-    # the socket in its RuntimePath (/run/bird2/bird.ctl).
-    systemd.sockets.bird2-socket = {
-      wantedBy = ["sockets.target"];
-      socketConfig = {
-        ListenStream = "/run/bird.ctl";
-      };
-    };
-
-    systemd.services.bird2-socket = {
-      requires = [ "bird2.service" ];
-      after = [ "bird2.service" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.systemd}/lib/systemd/systemd-socket-proxyd /run/bird2/bird.ctl";
       };
     };
 
