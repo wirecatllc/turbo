@@ -6,20 +6,11 @@ let
   cfg = config.turbo.networking.routing.bird2;
   genconfig = import ./genconfig.nix { inherit lib; };
 
-  birdPackage = pkgs.bird2.overrideAttrs (old: {
-    # src = pkgs.fetchgit {
-    #   url = "https://gitlab.nic.cz/labs/bird";
-    #   rev = "82f19ba95e421f00a8e99a866a2b8d9bbdba6cdc";
-    #   sha256 = "07mh41hsmkcpf6f6lnygzp6g59jma542pcqdkl54ysiqnjmi5zz1";
-    # };
-    nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
-      pkgs.autoreconfHook
-    ];
-    patches = (old.patches or []) ++ [
-      #./turbo-rpki-reload.patch
-      #./zhaofeng-logging.patch
-    ];
-  });
+  # birdPackage = pkgs.bird2.overrideAttrs (old: {
+  #   nativeBuildInputs = (old.nativeBuildInputs or []) ++ [
+  #     pkgs.autoreconfHook
+  #   ];
+  # });
 
   # == Sub-config files ==
   # node.conf
@@ -478,7 +469,7 @@ in
           The BIRD 2 package to use
         '';
         type = types.package;
-        default = birdPackage;
+        default = pkgs.bird2;
       };
       baseConfig = mkOption {
         description = ''
