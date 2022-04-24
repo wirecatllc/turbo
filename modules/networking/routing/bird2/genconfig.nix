@@ -57,7 +57,12 @@ let
       else "*** ERROR: Unknown network ${network} ***"
     )];
 
-  in relationship: network: renderList ((genRelationship relationship) ++ (genNetwork network));
+    genExtraParams = params: map (n: genCommunity (elemAt n 0) (elemAt n 1)) params;
+
+  in relationship: network: extraParams:
+      renderList ((genRelationship relationship)
+                 ++ (genNetwork network) 
+                 ++ (genExtraParams extraParams));
 in rec {
   # node.conf
   nodeConf = {
@@ -123,6 +128,7 @@ in rec {
     prefixes, importFilter, exportFilter,
     relationship, localPref, network, nextHopKeep,
     extraChannelConfigs, extraConfigs,
+    extraParams,
 
     config, ...
   }: let
@@ -133,10 +139,10 @@ in rec {
     compPassword = if password == null then "" else "password \"${password}\";";
     compAddPaths = if addPaths == false then "" else "add paths ${addPaths};";
     compImportFilter = renderFilter ''
-      common_import_filter(${toString compRealPeerAS}, ${toString localAS}, ${renderParams relationship network});
+      common_import_filter(${toString compRealPeerAS}, ${toString localAS}, ${renderParams relationship network extraParams});
     '' importFilter;
     compExportFilter = renderFilter ''
-      common_export_filter(${toString compRealPeerAS}, ${toString localAS}, ${renderParams relationship network});
+      common_export_filter(${toString compRealPeerAS}, ${toString localAS}, ${renderParams relationship network extraParams});
     '' exportFilter;
     compLocalPref = if localPref != null then "default bgp_local_pref ${localPref};" else (
       if relationship == "ixp" then "default bgp_local_pref 300;"
@@ -178,7 +184,8 @@ in rec {
     name, description, neighbor,
     protocols, rr, addPaths, password,
     importFilter, exportFilter, ibgpExportExternal,
-    extraChannelConfigs, extraConfigs,
+    extraChannelConfigs, extraConfigs, extraParams,
+
     config, ...
   }: let
     compDescription = if description == null then "AS${toString compRealPeerAS}" else description;

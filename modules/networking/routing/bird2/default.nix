@@ -429,6 +429,15 @@ let
         type = types.str;
         default = "";
       };
+      extraParams = mkOption {
+        description = ''
+          Extra params to be used 
+          (Ignored by IBGP)
+        '';
+        example = ''[ ["MISC" "MISC_DONT_REWRITE_NEXTHOP"] ]'';
+        type = types.listOf (types.listOf types.str);
+        default = [];
+      };
     };
   };
 
