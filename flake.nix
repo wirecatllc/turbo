@@ -11,6 +11,8 @@
     # A la carte
     nixosModules = {
       networking = ./modules/networking;
+      storage = ./modules/storage;
+      virtualization = ./modules/virtualization;
     };
   };
 }

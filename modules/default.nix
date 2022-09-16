@@ -2,5 +2,6 @@
   imports = [
     ./networking
     ./storage
+    ./virtualization
   ];
 }
