@@ -49,6 +49,7 @@ let
       };
     };
   };
+
   nodeType = types.submodule {
     options = {
       id = lib.mkOption {
@@ -134,6 +135,7 @@ let
       };
     };
   };
+  
   groupType = types.submodule {
     options = {
       hubs = lib.mkOption {

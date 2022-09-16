@@ -3,15 +3,8 @@ with builtins;
 let
   cfg = config.turbo.networking.isp-split-tunnel;
   types = lib.types;
-in
-{
-  options = {
-    turbo.networking.isp-split-tunnel = {
-      enable = lib.mkEnableOption "ISP split-tunneling setup";
-      interface = lib.mkOption {
-        description = "Name of the provider interface";
-        type = types.str;
-      };
+  interfaceType = {
+    options = {
       v4 = lib.mkOption {
         description = "Provider IPv4 address";
         type = types.nullOr types.str;
@@ -24,6 +17,18 @@ in
       };
     };
   };
+in
+{
+  options = {
+    turbo.networking.isp-split-tunnel = {
+      enable = lib.mkEnableOption "ISP split-tunneling setup";
+      interfaces = lib.mkOption {
+        type = types.attrsOf (types.submodule interfaceType);
+        default = {};
+      };
+    };
+  };
+
   config = lib.mkIf cfg.enable (
     let
       genTable = address: {
@@ -44,11 +49,12 @@ in
     in
     {
       # IPv4
-      turbo.networking.firewall.ip = genTable cfg.v4;
+      turbo.networking.firewall.ip = lib.mapAttrsgenTable cfg.v4;
       turbo.networking.firewall.ip6 = genTable cfg.v6;
 
-      systemd.network.networks."${cfg.interface}" = {
-        name = cfg.interface;
+      systemd.network.networks = lib.mapAttrs (n: v: 
+      {
+        name = n;
         routingPolicyRules = [
           {
             routingPolicyRuleConfig = {
@@ -58,7 +64,7 @@ in
             };
           }
         ];
-      };
+      }) config.turbo.networking.isp-split-tunnel.interfaces;
     }
   );
 }
