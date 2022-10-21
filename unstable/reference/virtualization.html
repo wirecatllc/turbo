@@ -1,0 +1,1077 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Virtualization</title>
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="../introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="../reference/index.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../reference/networking.html"><strong aria-hidden="true">2.1.</strong> Networking</a></li><li class="chapter-item expanded "><a href="../reference/storage.html"><strong aria-hidden="true">2.2.</strong> Storage</a></li><li class="chapter-item expanded "><a href="../reference/virtualization.html" class="active"><strong aria-hidden="true">2.3.</strong> Virtualization</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="virtualization-options"><a class="header" href="#virtualization-options">Virtualization Options</a></h1>
+<!--
+    The following is injected by the build system
+
+    Looking to improve the descriptions? Head to `modules/virtualization` in the repo :)
+-->
+<h2 id="turbovirtualizationlibvirtdomains"><a class="header" href="#turbovirtualizationlibvirtdomains">turbo.virtualization.libvirt.domains</a></h2>
+<p>Set of Domains(Machines) defined on Host</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputune"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputune">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune</a></h2>
+<p>CPU Tune</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputuneperiod"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputuneperiod">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.period</a></h2>
+<p>Enforcement period (us)
+Within each <code>period</code> the vCPU cannot consume more
+than <code>quota</code> worth of runtime.
+This is applied per vCPU.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputunequota"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputunequota">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.quota</a></h2>
+<p>vCPU quota (us)
+Within each <code>period</code> the vCPU cannot consume more
+than <code>quota</code> worth of runtime.
+A negative value means no limits will be applied.
+This is applied per vCPU.</p>
+<p><em><em>Type</em></em>:
+null or 32 bit signed integer; between -2147483648 and 2147483647 (both inclusive)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputuneshares"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputuneshares">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.shares</a></h2>
+<p>CPU shares
+Relative CPU weight of the machine.
+Use <code>period</code> and <code>quota</code> to enforce hard limits
+to CPU usage.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevices"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevices">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices</a></h2>
+<p>device type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsole"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsole">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console</a></h2>
+<p>console</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.source</a></h2>
+<p>sub source resource</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenamesourcepath"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenamesourcepath">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.source.path</a></h2>
+<p>Device Path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/dev/pts/4&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target</a></h2>
+<p>N/A</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametargetport"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametargetport">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target.port</a></h2>
+<p>N/A</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametargettype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametargettype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target.type</a></h2>
+<p>serial (described below); virtio (usable whenever VirtIO support is available); xen, lxc and openvz (available when the corresponding hypervisor is in use). sclp and sclplm (usable for s390 and s390x QEMU guests) are supported for compatibility reasons but should not be used for new guests: use the sclpconsole and sclplmconsole target models, respectively, with the serial element instead.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;serial&quot;, &quot;virtio&quot;, &quot;xen&quot;, &quot;lxc&quot;, &quot;openvz&quot;, &quot;sclp&quot;, &quot;sclplm&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or value &quot;pty&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pty&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisk"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisk">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk</a></h2>
+<p>disk</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedevice"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedevice">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.device</a></h2>
+<p>device type</p>
+<p><em><em>Type</em></em>:
+one of &quot;floppy&quot;, &quot;disk&quot;, &quot;cdrom&quot;, &quot;lun&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;disk&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedriver"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedriver">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivername"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivername">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver.name</a></h2>
+<p>If the hypervisor supports multiple backend drivers, then the name attribute selects the primary backend driver name, while the optional type attribute provides the sub-type. For example, xen supports a name of &quot;tap&quot;, &quot;tap2&quot;, &quot;phy&quot;, or &quot;file&quot;, with a type of &quot;aio&quot;, while qemu only supports a name of &quot;qemu&quot;, but multiple types including &quot;raw&quot;, &quot;bochs&quot;, &quot;qcow2&quot;, and &quot;qed&quot;.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;qemu&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver.type</a></h2>
+<p>see name</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;qcow2&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamereadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamereadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.readonly</a></h2>
+<p>If present, this indicates the device cannot be modified by the guest. For now, this is the default for disks with attribute device='cdrom'.</p>
+<p><em><em>Type</em></em>:
+null or boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamesourcefile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamesourcefile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.source.file</a></h2>
+<p>File Path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametargetbus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametargetbus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target.bus</a></h2>
+<p>If omitted, the bus type is inferred from the style of the device name (e.g. a device named 'sda' will typically be exported using a SCSI bus).</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ide&quot;, &quot;scsi&quot;, &quot;virtio&quot;, &quot;xen&quot;, &quot;usb&quot;, &quot;sata&quot;, &quot;sd&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametargetdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametargetdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target.dev</a></h2>
+<p>The dev attribute indicates the &quot;logical&quot; device name. The actual device name specified is not guaranteed to map to the device name in the guest OS. Treat it as a device ordering hint. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;vda&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+one of &quot;file&quot;, &quot;block&quot;, &quot;dir&quot;, &quot;network&quot;, &quot;volume&quot;, &quot;nvme&quot;, &quot;vhostuser&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;file&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesextraconfig"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesextraconfig">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.extraConfig</a></h2>
+<p>XML to insert</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystem"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystem">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem</a></h2>
+<p>filesystem</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnameaccessmode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnameaccessmode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.accessmode</a></h2>
+<p>Access mode</p>
+<p><em><em>Type</em></em>:
+one of &quot;passthrough&quot;, &quot;mapped&quot;, &quot;squash&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;mapped&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinary"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinary">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarycachemode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarycachemode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.cacheMode</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;none&quot;, &quot;always&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;always&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylock"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylock">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockflock"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockflock">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock.flock</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockposix"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockposix">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock.posix</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarypath"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarypath">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.path</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinaryxattr"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinaryxattr">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.xattr</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriver"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriver">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriverformat"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriverformat">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver.format</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;raw&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedrivertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedrivertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+one of &quot;path&quot;, &quot;loop&quot;, &quot;virtiofs&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamereadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamereadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.readonly</a></h2>
+<p>Is media read only</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcedir"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcedir">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.dir</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/path&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcefile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcefile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.file</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/export/to/guest.img&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcesocket"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcesocket">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.socket</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/tmp/sock&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametargetdir"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametargetdir">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.target.dir</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/import/from/host&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;mount&quot;, &quot;file&quot;, &quot;block&quot;, &quot;ram&quot;, &quot;bind&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphics"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphics">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics</a></h2>
+<p>graphics</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelisten"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelisten">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistensocket"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistensocket">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen.socket</a></h2>
+<p>socket path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/run/hypervisor/vnc/server-1&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+one of &quot;address&quot;, &quot;socket&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;sdl&quot;, &quot;vnc&quot;, &quot;spice&quot;, &quot;rdp&quot;, &quot;desktop&quot;, &quot;egl-headless&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev</a></h2>
+<p>hostdev</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.managed</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;yes&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.mode</a></h2>
+<p>mode</p>
+<p><em><em>Type</em></em>:
+value &quot;subsystem&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;subsystem&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerom"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerom">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerombar"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerombar">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom.bar</a></h2>
+<p>bar</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnameromfile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnameromfile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom.file</a></h2>
+<p>socket path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddress"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddress">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressbus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressbus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.bus</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x06&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressdomain"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressdomain">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.domain</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;0x0000&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressfunction"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressfunction">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.function</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressslot"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressslot">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.slot</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x02&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourcewritefiltering"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourcewritefiltering">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.writeFiltering</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+value &quot;pci&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pci&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinput"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinput">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input</a></h2>
+<p>input</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamebus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamebus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.bus</a></h2>
+<p>input bus</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;xen&quot;, &quot;ps2&quot;, &quot;usb&quot;, &quot;virtio&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source</a></h2>
+<p>sub source resource</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcedev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcedev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.dev</a></h2>
+<p>boot device</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrab"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrab">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.grab</a></h2>
+<p>attributes grab with value 'all' which when enabled grabs all input devices instead of just one</p>
+<p><em><em>Type</em></em>:
+null or value &quot;all&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrabtoggle"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrabtoggle">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.grabToggle</a></h2>
+<p>change the grab key combination</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ctrl-ctrl&quot;, &quot;alt-alt&quot;, &quot;shift-shift&quot;, &quot;meta-meta&quot;, &quot;scrolllock&quot;, &quot;ctrl-scrolllock&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcerepeat"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcerepeat">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.repeat</a></h2>
+<p>repeat with value 'on'/'off' to enable/disable auto-repeat events </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;mouse&quot;, &quot;tablet&quot;, &quot;keyboard&quot;, &quot;passthrough&quot;, &quot;evdev&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterface"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterface">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface</a></h2>
+<p>interface</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemac"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemac">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.mac</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemacaddress"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemacaddress">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.mac.address</a></h2>
+<p>device mac address</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;52:54:00:5d:c7:9e&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.managed</a></h2>
+<p>managed attr</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.model</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodeltype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodeltype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.model.type</a></h2>
+<p><em><em>Type</em></em>:
+value &quot;virtio&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;virtio&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesourcebridge"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesourcebridge">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.source.bridge</a></h2>
+<p>Bridged Interface</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target.dev</a></h2>
+<p>device name</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;v-server&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetmanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetmanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target.managed</a></h2>
+<p>managed attr</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ethernet&quot;, &quot;network&quot;, &quot;direct&quot;, &quot;bridge&quot;, &quot;user&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserial"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserial">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial</a></h2>
+<p>serial</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.model</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodelname"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodelname">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.model.name</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;isa-serial&quot;, &quot;16550a&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;isa-serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetport"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetport">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.port</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargettype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargettype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.type</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;system-serial&quot;, &quot;isa-serial&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;isa-serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or value &quot;pty&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pty&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameextraconfig"><a class="header" href="#turbovirtualizationlibvirtdomainsnameextraconfig">turbo.virtualization.libvirt.domains.&lt;name&gt;.extraConfig</a></h2>
+<p>extra xml to add in domain</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeatures"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeatures">turbo.virtualization.libvirt.domains.&lt;name&gt;.features</a></h2>
+<p>feature type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeaturesacpi"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeaturesacpi">turbo.virtualization.libvirt.domains.&lt;name&gt;.features.acpi</a></h2>
+<p>ACPI is useful for power management, for example, with KVM guests it is required for graceful shutdown to work.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeaturesapic"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeaturesapic">turbo.virtualization.libvirt.domains.&lt;name&gt;.features.apic</a></h2>
+<p>APIC allows the use of programmable IRQ management. Since 0.10.2 (QEMU only) there is an optional attribute eoi with values on and off which toggles the availability of EOI (End of Interrupt) for the guest.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememory"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememory">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory</a></h2>
+<p>memory</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorysize"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorysize">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory.size</a></h2>
+<p>The maximum allocation of memory for the guest at boot time. The memory allocation includes possible additional memory devices specified at start or hotplugged later.</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>524288
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememoryunit"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememoryunit">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory.unit</a></h2>
+<p>defaults to &quot;KiB&quot; (kibibytes, 210 or blocks of 1024 bytes).
+Valid units are &quot;b&quot; or &quot;bytes&quot; for bytes, 
+&quot;KB&quot; for kilobytes (103 or 1,000 bytes), 
+&quot;k&quot; or &quot;KiB&quot; for kibibytes (1024 bytes), 
+&quot;MB&quot; for megabytes (106 or 1,000,000 bytes), 
+&quot;M&quot; or &quot;MiB&quot; for mebibytes (220 or 1,048,576 bytes),
+&quot;GB&quot; for gigabytes (109 or 1,000,000,000 bytes), 
+&quot;G&quot; or &quot;GiB&quot; for gibibytes (230 or 1,073,741,824 bytes), 
+&quot;TB&quot; for terabytes (1012 or 1,000,000,000,000 bytes), 
+or &quot;T&quot; or &quot;TiB&quot; for tebibytes (240 or 1,099,511,627,776 bytes). 
+However, the value will be rounded up to the nearest kibibyte by libvirt, 
+and may be further rounded to the granularity supported by the hypervisor. </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;b&quot;, &quot;bytes&quot;, &quot;k&quot;, &quot;KiB&quot;, &quot;MB&quot;, &quot;M&quot;, &quot;MiB&quot;, &quot;GB&quot;, &quot;G&quot;, &quot;GiB&quot;, &quot;TB&quot;, &quot;T&quot;, &quot;TiB&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;KiB&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybacking"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybacking">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking</a></h2>
+<p>Memory Backing</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybackingaccessmode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybackingaccessmode">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking.accessMode</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;shared&quot;, &quot;private&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;shared&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybackingsourcetype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybackingsourcetype">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking.sourceType</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;memfd&quot;, &quot;file&quot;, &quot;anonymous&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameos"><a class="header" href="#turbovirtualizationlibvirtdomainsnameos">turbo.virtualization.libvirt.domains.&lt;name&gt;.os</a></h2>
+<p>OS setting</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosbootorder"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosbootorder">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.bootOrder</a></h2>
+<p>Boot order</p>
+<p><em><em>Type</em></em>:
+list of one of &quot;fd&quot;, &quot;hd&quot;, &quot;cdrom&quot;, &quot;network&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;hd&quot;,&quot;cdrom&quot;]
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosenablebootmenu"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosenablebootmenu">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.enableBootMenu</a></h2>
+<p>Boot Menu</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosfirmware"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosfirmware">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.firmware</a></h2>
+<p>System firmware</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;bios&quot;, &quot;efi&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloader"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloader">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader</a></h2>
+<p>Loader Option</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloaderpath"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloaderpath">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.path</a></h2>
+<p>BIOS Path</p>
+<p><em><em>Type</em></em>:
+path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloaderreadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloaderreadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.readonly</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloadersecure"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloadersecure">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.secure</a></h2>
+<p>Secure BOOT</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloadertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloadertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.type</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;rom&quot;, &quot;pflash&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostype"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostype">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type</a></h2>
+<p>os type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypearch"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypearch">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.arch</a></h2>
+<p>arch specifying the CPU architecture to virtualization
+If arch is omitted then for most hypervisor drivers, the host native arch will be chosen</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypecontent"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypecontent">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.content</a></h2>
+<p>hvm: full virt
+linux: Xen</p>
+<p><em><em>Type</em></em>:
+one of &quot;hvm&quot;, &quot;linux&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;hvm&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypemachine"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypemachine">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.machine</a></h2>
+<p>machine referring to the machine type. The Capabilities XML provides details on allowed values for these. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;pc-i440fx-5.1&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnametitle"><a class="header" href="#turbovirtualizationlibvirtdomainsnametitle">turbo.virtualization.libvirt.domains.&lt;name&gt;.title</a></h2>
+<p>The optional element title provides space for a short description of the domain. The title should not contain any newlines. Since 0.9.10 .</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;A string with no newline&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.type</a></h2>
+<p>The type specifies the hypervisor used for running the domain. The allowed values are driver specific, but include &quot;xen&quot;, &quot;kvm&quot;, &quot;qemu&quot; and &quot;lxc&quot;.</p>
+<p><em><em>Type</em></em>:
+one of &quot;xen&quot;, &quot;kvm&quot;, &quot;qemu&quot;, &quot;lxc&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;kvm&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameuuid"><a class="header" href="#turbovirtualizationlibvirtdomainsnameuuid">turbo.virtualization.libvirt.domains.&lt;name&gt;.uuid</a></h2>
+<p>Machine UUID</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;509ee912-24b8-11eb-96f4-1b7af47272c3&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpu"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpu">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu</a></h2>
+<p>CPU Allocation</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpucpuset"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpucpuset">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.cpuset</a></h2>
+<p>The optional attribute cpuset is a comma-separated list of physical CPU numbers that domain process and virtual CPUs can be pinned to by default. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;1-4,^3,6&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpucurrent"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpucurrent">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.current</a></h2>
+<p>The optional attribute current can be used to specify whether fewer than the maximum number of virtual CPUs should be enabled. Since 0.8.5</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpuplacement"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpuplacement">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.placement</a></h2>
+<p>The optional attribute placement can be used to indicate the CPU placement mode for domain process. </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;static&quot;, &quot;auto&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpusize"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpusize">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.size</a></h2>
+<p>The content of this element defines the maximum number of virtual CPUs allocated for the guest OS, which must be between 1 and the maximum supported by the hypervisor.</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>1
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../reference/storage.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../reference/storage.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+    </body>
+</html>

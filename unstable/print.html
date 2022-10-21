@@ -1,0 +1,3255 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title></title>
+        <meta name="robots" content="noindex" />
+        <!-- Custom HTML head -->
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="reference/index.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/networking.html"><strong aria-hidden="true">2.1.</strong> Networking</a></li><li class="chapter-item expanded "><a href="reference/storage.html"><strong aria-hidden="true">2.2.</strong> Storage</a></li><li class="chapter-item expanded "><a href="reference/virtualization.html"><strong aria-hidden="true">2.3.</strong> Virtualization</a></li></ol></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title"></h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<p><strong>Turbo</strong> is a collection of <a href="https://nixos.org">NixOS</a> modules that provide various utils for cloud infrastructure deployment using Nix libraries found in Nixpkgs, similar to <a href="https://github.com/nix-community/home-manager">home-manager</a>.</p>
+<p>Right now turbo is under heavy construction and may involve various breaking change. Proceed with cautious.</p>
+<h2 id="links"><a class="header" href="#links">Links</a></h2>
+<ul>
+<li><a href="https://github.com/wirecatllc/turbo">GitHub</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="this-is-the-api-for-each-of-the-options-available-in-the-module"><a class="header" href="#this-is-the-api-for-each-of-the-options-available-in-the-module">This is the API for each of the options available in the module</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="network-options"><a class="header" href="#network-options">Network Options</a></h1>
+<!--
+    The following is injected by the build system
+
+    Looking to improve the descriptions? Head to `modules/network` in the repo :)
+-->
+<h2 id="turbonetworkingfirewallenable"><a class="header" href="#turbonetworkingfirewallenable">turbo.networking.firewall.enable</a></h2>
+<p>Enable the ferm firewall</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingfirewallextraconfigs"><a class="header" href="#turbonetworkingfirewallextraconfigs">turbo.networking.firewall.extraConfigs</a></h2>
+<p>Extra configs to be added</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrules"><a class="header" href="#turbonetworkingfirewallfilterinputrules">turbo.networking.firewall.filterInputRules</a></h2>
+<p>Common INPUT rules for both v4 and v6</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesaction"><a class="header" href="#turbonetworkingfirewallfilterinputrulesaction">turbo.networking.firewall.filterInputRules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesargs"><a class="header" href="#turbonetworkingfirewallfilterinputrulesargs">turbo.networking.firewall.filterInputRules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesdaddr"><a class="header" href="#turbonetworkingfirewallfilterinputrulesdaddr">turbo.networking.firewall.filterInputRules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesdescription"><a class="header" href="#turbonetworkingfirewallfilterinputrulesdescription">turbo.networking.firewall.filterInputRules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesdport"><a class="header" href="#turbonetworkingfirewallfilterinputrulesdport">turbo.networking.firewall.filterInputRules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesextrafilters"><a class="header" href="#turbonetworkingfirewallfilterinputrulesextrafilters">turbo.networking.firewall.filterInputRules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesinterface"><a class="header" href="#turbonetworkingfirewallfilterinputrulesinterface">turbo.networking.firewall.filterInputRules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesmark"><a class="header" href="#turbonetworkingfirewallfilterinputrulesmark">turbo.networking.firewall.filterInputRules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesmodule"><a class="header" href="#turbonetworkingfirewallfilterinputrulesmodule">turbo.networking.firewall.filterInputRules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesouterface"><a class="header" href="#turbonetworkingfirewallfilterinputrulesouterface">turbo.networking.firewall.filterInputRules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulesproto"><a class="header" href="#turbonetworkingfirewallfilterinputrulesproto">turbo.networking.firewall.filterInputRules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulessaddr"><a class="header" href="#turbonetworkingfirewallfilterinputrulessaddr">turbo.networking.firewall.filterInputRules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallfilterinputrulessport"><a class="header" href="#turbonetworkingfirewallfilterinputrulessport">turbo.networking.firewall.filterInputRules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip"><a class="header" href="#turbonetworkingfirewallip">turbo.networking.firewall.ip</a></h2>
+<p>ip</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilter"><a class="header" href="#turbonetworkingfirewallipfilter">turbo.networking.firewall.ip.filter</a></h2>
+<p>filter table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterappends"><a class="header" href="#turbonetworkingfirewallipfilterappends">turbo.networking.firewall.ip.filter.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchains"><a class="header" href="#turbonetworkingfirewallipfilterchains">turbo.networking.firewall.ip.filter.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnameappends"><a class="header" href="#turbonetworkingfirewallipfilterchainsnameappends">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamepolicy"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamepolicy">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnameprepends"><a class="header" href="#turbonetworkingfirewallipfilterchainsnameprepends">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerules"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerules">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesaction">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesargs">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesdaddr">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesdescription">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesdport">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesextrafilters">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesinterface">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesmark">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesmodule">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesouterface">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulesproto">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulessaddr">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterchainsnamerulessport"><a class="header" href="#turbonetworkingfirewallipfilterchainsnamerulessport">turbo.networking.firewall.ip.filter.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipfilterprepends"><a class="header" href="#turbonetworkingfirewallipfilterprepends">turbo.networking.firewall.ip.filter.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipmangle"><a class="header" href="#turbonetworkingfirewallipmangle">turbo.networking.firewall.ip.mangle</a></h2>
+<p>mangle table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipmangleappends"><a class="header" href="#turbonetworkingfirewallipmangleappends">turbo.networking.firewall.ip.mangle.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechains"><a class="header" href="#turbonetworkingfirewallipmanglechains">turbo.networking.firewall.ip.mangle.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnameappends"><a class="header" href="#turbonetworkingfirewallipmanglechainsnameappends">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamepolicy"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamepolicy">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnameprepends"><a class="header" href="#turbonetworkingfirewallipmanglechainsnameprepends">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerules"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerules">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesaction">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesargs">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesdaddr">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesdescription">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesdport">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesextrafilters">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesinterface">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesmark">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesmodule">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesouterface">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulesproto">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulessaddr">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmanglechainsnamerulessport"><a class="header" href="#turbonetworkingfirewallipmanglechainsnamerulessport">turbo.networking.firewall.ip.mangle.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipmangleprepends"><a class="header" href="#turbonetworkingfirewallipmangleprepends">turbo.networking.firewall.ip.mangle.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipnat"><a class="header" href="#turbonetworkingfirewallipnat">turbo.networking.firewall.ip.nat</a></h2>
+<p>nat table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatappends"><a class="header" href="#turbonetworkingfirewallipnatappends">turbo.networking.firewall.ip.nat.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchains"><a class="header" href="#turbonetworkingfirewallipnatchains">turbo.networking.firewall.ip.nat.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnameappends"><a class="header" href="#turbonetworkingfirewallipnatchainsnameappends">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamepolicy"><a class="header" href="#turbonetworkingfirewallipnatchainsnamepolicy">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnameprepends"><a class="header" href="#turbonetworkingfirewallipnatchainsnameprepends">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerules"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerules">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesaction">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesargs">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesdaddr">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesdescription">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesdport">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesextrafilters">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesinterface">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesmark">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesmodule">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesouterface">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulesproto">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulessaddr">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatchainsnamerulessport"><a class="header" href="#turbonetworkingfirewallipnatchainsnamerulessport">turbo.networking.firewall.ip.nat.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallipnatprepends"><a class="header" href="#turbonetworkingfirewallipnatprepends">turbo.networking.firewall.ip.nat.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6"><a class="header" href="#turbonetworkingfirewallip6">turbo.networking.firewall.ip6</a></h2>
+<p>ip6</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filter"><a class="header" href="#turbonetworkingfirewallip6filter">turbo.networking.firewall.ip6.filter</a></h2>
+<p>filter table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterappends"><a class="header" href="#turbonetworkingfirewallip6filterappends">turbo.networking.firewall.ip6.filter.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchains"><a class="header" href="#turbonetworkingfirewallip6filterchains">turbo.networking.firewall.ip6.filter.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnameappends"><a class="header" href="#turbonetworkingfirewallip6filterchainsnameappends">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamepolicy"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamepolicy">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnameprepends"><a class="header" href="#turbonetworkingfirewallip6filterchainsnameprepends">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerules"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerules">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesaction">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesargs">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesdaddr">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesdescription">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesdport">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesextrafilters">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesinterface">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesmark">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesmodule">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesouterface">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulesproto">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulessaddr">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterchainsnamerulessport"><a class="header" href="#turbonetworkingfirewallip6filterchainsnamerulessport">turbo.networking.firewall.ip6.filter.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6filterprepends"><a class="header" href="#turbonetworkingfirewallip6filterprepends">turbo.networking.firewall.ip6.filter.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6mangle"><a class="header" href="#turbonetworkingfirewallip6mangle">turbo.networking.firewall.ip6.mangle</a></h2>
+<p>mangle table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6mangleappends"><a class="header" href="#turbonetworkingfirewallip6mangleappends">turbo.networking.firewall.ip6.mangle.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechains"><a class="header" href="#turbonetworkingfirewallip6manglechains">turbo.networking.firewall.ip6.mangle.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnameappends"><a class="header" href="#turbonetworkingfirewallip6manglechainsnameappends">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamepolicy"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamepolicy">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnameprepends"><a class="header" href="#turbonetworkingfirewallip6manglechainsnameprepends">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerules"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerules">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesaction">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesargs">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesdaddr">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesdescription">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesdport">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesextrafilters">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesinterface">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesmark">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesmodule">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesouterface">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulesproto">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulessaddr">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6manglechainsnamerulessport"><a class="header" href="#turbonetworkingfirewallip6manglechainsnamerulessport">turbo.networking.firewall.ip6.mangle.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6mangleprepends"><a class="header" href="#turbonetworkingfirewallip6mangleprepends">turbo.networking.firewall.ip6.mangle.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6nat"><a class="header" href="#turbonetworkingfirewallip6nat">turbo.networking.firewall.ip6.nat</a></h2>
+<p>nat table</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natappends"><a class="header" href="#turbonetworkingfirewallip6natappends">turbo.networking.firewall.ip6.nat.appends</a></h2>
+<p>Extra configs to be appended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchains"><a class="header" href="#turbonetworkingfirewallip6natchains">turbo.networking.firewall.ip6.nat.chains</a></h2>
+<p>Chains</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnameappends"><a class="header" href="#turbonetworkingfirewallip6natchainsnameappends">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.appends</a></h2>
+<p>Rules to append</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamepolicy"><a class="header" href="#turbonetworkingfirewallip6natchainsnamepolicy">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.policy</a></h2>
+<p>Policy</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnameprepends"><a class="header" href="#turbonetworkingfirewallip6natchainsnameprepends">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.prepends</a></h2>
+<p>Rules to prepend</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerules"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerules">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules</a></h2>
+<p>Rules</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesaction"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesaction">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.action</a></h2>
+<p>Action</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;ACCEPT&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesargs"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesargs">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.args</a></h2>
+<p>Extra arguments following the action</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesdaddr"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesdaddr">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.daddr</a></h2>
+<p>Destination address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesdescription"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesdescription">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesdport"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesdport">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.dport</a></h2>
+<p>Destination port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesextrafilters"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesextrafilters">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.extraFilters</a></h2>
+<p>Extra filters</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesinterface"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesinterface">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.interface</a></h2>
+<p>Incoming interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesmark"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesmark">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.mark</a></h2>
+<p>Match mark</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesmodule"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesmodule">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.module</a></h2>
+<p>Load module</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesouterface"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesouterface">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.outerface</a></h2>
+<p>Outgoing interface</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulesproto"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulesproto">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.proto</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulessaddr"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulessaddr">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.saddr</a></h2>
+<p>Source address</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natchainsnamerulessport"><a class="header" href="#turbonetworkingfirewallip6natchainsnamerulessport">turbo.networking.firewall.ip6.nat.chains.&lt;name&gt;.rules.*.sport</a></h2>
+<p>Source port</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallip6natprepends"><a class="header" href="#turbonetworkingfirewallip6natprepends">turbo.networking.firewall.ip6.nat.prepends</a></h2>
+<p>Extra configs to be prepended</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallmacros"><a class="header" href="#turbonetworkingfirewallmacros">turbo.networking.firewall.macros</a></h2>
+<p>Macros</p>
+<p>If you define a macro named abc, then @abc@ in all
+rules will be replaced with its content.</p>
+<p><em><em>Type</em></em>:
+attribute set of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingfirewallportforward"><a class="header" href="#turbonetworkingfirewallportforward">turbo.networking.firewall.portForward</a></h2>
+<p>A list of port-forward rules to render</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingfirewallportforwarddstip"><a class="header" href="#turbonetworkingfirewallportforwarddstip">turbo.networking.firewall.portForward.*.dstIp</a></h2>
+<p>Forward to which host</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;192.168.1.100&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallportforwarddstport"><a class="header" href="#turbonetworkingfirewallportforwarddstport">turbo.networking.firewall.portForward.*.dstPort</a></h2>
+<p>Outbound dst port</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>22
+</code></pre>
+<h2 id="turbonetworkingfirewallportforwardinterface"><a class="header" href="#turbonetworkingfirewallportforwardinterface">turbo.networking.firewall.portForward.*.interface</a></h2>
+<p>Inbound interface</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;eth0&quot;
+</code></pre>
+<h2 id="turbonetworkingfirewallportforwardprotocol"><a class="header" href="#turbonetworkingfirewallportforwardprotocol">turbo.networking.firewall.portForward.*.protocol</a></h2>
+<p>What protocol to forward</p>
+<p><em><em>Type</em></em>:
+null or string or unsigned integer, meaning &gt;=0 or list of string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingfirewallportforwardsrcport"><a class="header" href="#turbonetworkingfirewallportforwardsrcport">turbo.networking.firewall.portForward.*.srcPort</a></h2>
+<p>Inbound dst port</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>22
+</code></pre>
+<h2 id="turbonetworkingisp-split-tunnelenable"><a class="header" href="#turbonetworkingisp-split-tunnelenable">turbo.networking.isp-split-tunnel.enable</a></h2>
+<p>Whether to enable ISP split-tunneling setup.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbonetworkingisp-split-tunnelinterface"><a class="header" href="#turbonetworkingisp-split-tunnelinterface">turbo.networking.isp-split-tunnel.interface</a></h2>
+<p>Name of the provider interface</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingisp-split-tunnelv4"><a class="header" href="#turbonetworkingisp-split-tunnelv4">turbo.networking.isp-split-tunnel.v4</a></h2>
+<p>Provider IPv4 address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingisp-split-tunnelv6"><a class="header" href="#turbonetworkingisp-split-tunnelv6">turbo.networking.isp-split-tunnel.v6</a></h2>
+<p>Provider IPv6 address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingngtundefaultgroupconfigfullmesh"><a class="header" href="#turbonetworkingngtundefaultgroupconfigfullmesh">turbo.networking.ngtun.defaultGroupConfig.fullMesh</a></h2>
+<p>Whether to enable full mesh for all nodes in the group</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingngtundefaultgroupconfighubs"><a class="header" href="#turbonetworkingngtundefaultgroupconfighubs">turbo.networking.ngtun.defaultGroupConfig.hubs</a></h2>
+<p>Nodes to which all nodes in the group should have a tunnel</p>
+<p>Useful for regional hub-and-spokes networks.</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingngtunenable"><a class="header" href="#turbonetworkingngtunenable">turbo.networking.ngtun.enable</a></h2>
+<p>Participate in the mesh</p>
+<p>The <code>group</code> configurations must be identical on
+all nodes, as the tunnels are created &quot;from their
+perspective.&quot;</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamecost"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamecost">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.cost</a></h2>
+<p>Cost</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingngtungeneratedtunnelsnameendpoint"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnameendpoint">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.endpoint</a></h2>
+<p>Endpoint</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamelinklocalid"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamelinklocalid">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.linkLocalId</a></h2>
+<p>Link local identifier</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamelistenport"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamelistenport">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.listenPort</a></h2>
+<p>Port to listen on</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamepeer"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamepeer">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.peer</a></h2>
+<p>Name of the node</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamepersistentkeepalive"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamepersistentkeepalive">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.persistentKeepalive</a></h2>
+<p>Whether to enable persistent keep-alive</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingngtungeneratedtunnelsnamepublickey"><a class="header" href="#turbonetworkingngtungeneratedtunnelsnamepublickey">turbo.networking.ngtun.generatedTunnels.&lt;name&gt;.publicKey</a></h2>
+<p>Peer public key</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingngtunglobal"><a class="header" href="#turbonetworkingngtunglobal">turbo.networking.ngtun.global</a></h2>
+<p>Global options</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingngtunglobaldefaultcost"><a class="header" href="#turbonetworkingngtunglobaldefaultcost">turbo.networking.ngtun.global.defaultCost</a></h2>
+<p>Default cost</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>20
+</code></pre>
+<h2 id="turbonetworkingngtunglobalfwmark"><a class="header" href="#turbonetworkingngtunglobalfwmark">turbo.networking.ngtun.global.fwMark</a></h2>
+<p>Firewall mark</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingngtunglobalportbase"><a class="header" href="#turbonetworkingngtunglobalportbase">turbo.networking.ngtun.global.portBase</a></h2>
+<p>Port base</p>
+<p>For each tunnel, the listening port is computed as:
+Port Base + 100 * Self ID + Peer ID</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingngtungroups"><a class="header" href="#turbonetworkingngtungroups">turbo.networking.ngtun.groups</a></h2>
+<p>Groups</p>
+<p>Must be identical across all nodes. Specify
+this in the common configurations.</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingngtungroupsnamefullmesh"><a class="header" href="#turbonetworkingngtungroupsnamefullmesh">turbo.networking.ngtun.groups.&lt;name&gt;.fullMesh</a></h2>
+<p>Whether to enable full mesh for all nodes in the group</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingngtungroupsnamehubs"><a class="header" href="#turbonetworkingngtungroupsnamehubs">turbo.networking.ngtun.groups.&lt;name&gt;.hubs</a></h2>
+<p>Nodes to which all nodes in the group should have a tunnel</p>
+<p>Useful for regional hub-and-spokes networks.</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingngtunnode"><a class="header" href="#turbonetworkingngtunnode">turbo.networking.ngtun.node</a></h2>
+<p>Node options</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingngtunnodecosts"><a class="header" href="#turbonetworkingngtunnodecosts">turbo.networking.ngtun.node.costs</a></h2>
+<p>Known costs to specified peers</p>
+<p>The cost of a tunnel will be the highest of the
+specified costs between the two nodes, and defaults to
+global.defaultCost if neither has specified a cost.</p>
+<p><em><em>Type</em></em>:
+attribute set of unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>{&quot;node-b&quot;:100,&quot;node-c&quot;:1,&quot;node-d&quot;:999}
+</code></pre>
+<h2 id="turbonetworkingngtunnodeendpoint"><a class="header" href="#turbonetworkingngtunnodeendpoint">turbo.networking.ngtun.node.endpoint</a></h2>
+<p>Static endpoint</p>
+<p>It's possible for a node to have no static
+endpoints at all.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingngtunnodeendpointipv4"><a class="header" href="#turbonetworkingngtunnodeendpointipv4">turbo.networking.ngtun.node.endpoint.ipv4</a></h2>
+<p>The IPv4 endpoint (host only)</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingngtunnodeendpointipv6"><a class="header" href="#turbonetworkingngtunnodeendpointipv6">turbo.networking.ngtun.node.endpoint.ipv6</a></h2>
+<p>The IPv6 endpoint (host only)</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingngtunnodeextrapeers"><a class="header" href="#turbonetworkingngtunnodeextrapeers">turbo.networking.ngtun.node.extraPeers</a></h2>
+<p>List of additional peers to create tunnels to</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingngtunnodegroups"><a class="header" href="#turbonetworkingngtunnodegroups">turbo.networking.ngtun.node.groups</a></h2>
+<p>Groups this node belongs to</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingngtunnodeid"><a class="header" href="#turbonetworkingngtunnodeid">turbo.networking.ngtun.node.id</a></h2>
+<p>Unique numerical ID for the node</p>
+<p>This ID must be unique among all nodes, or at least
+among the nodes it will have a tunnel to.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingngtunnodepersistentkeepalive"><a class="header" href="#turbonetworkingngtunnodepersistentkeepalive">turbo.networking.ngtun.node.persistentKeepalive</a></h2>
+<p>Whether to enable persistent keep-alive for
+all tunnels on this node.</p>
+<p>For &quot;auto&quot;, persistent keep-alive will be enabled:</p>
+<ul>
+<li>If the tunnel will be established over an address
+family for which we don't have a static endpoint</li>
+</ul>
+<p><em><em>Type</em></em>:
+one of &quot;auto&quot;, &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;auto&quot;
+</code></pre>
+<h2 id="turbonetworkingngtunnodeprivatekey"><a class="header" href="#turbonetworkingngtunnodeprivatekey">turbo.networking.ngtun.node.privateKey</a></h2>
+<p>WireGuard private key for the node</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingngtunnodesupportedfamilies"><a class="header" href="#turbonetworkingngtunnodesupportedfamilies">turbo.networking.ngtun.node.supportedFamilies</a></h2>
+<p>List of address families supported by the node.</p>
+<p>Defaults to the families for which an endpoint
+is configured.</p>
+<p><em><em>Type</em></em>:
+list of one of &quot;ipv4&quot;, &quot;ipv6&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingrename-interfacesenable"><a class="header" href="#turbonetworkingrename-interfacesenable">turbo.networking.rename-interfaces.enable</a></h2>
+<p>Rename network interfaces based on MAC address</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingrename-interfacesinterfaces"><a class="header" href="#turbonetworkingrename-interfacesinterfaces">turbo.networking.rename-interfaces.interfaces</a></h2>
+<p>Interfaces</p>
+<p><em><em>Type</em></em>:
+attribute set of string</p>
+<h2 id="turbonetworkingrename-interfacesmethod"><a class="header" href="#turbonetworkingrename-interfacesmethod">turbo.networking.rename-interfaces.method</a></h2>
+<p>Method to rename the interfaces</p>
+<p><em><em>Type</em></em>:
+one of &quot;udev&quot;, &quot;networkd&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;networkd&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingaddresses"><a class="header" href="#turbonetworkingroutingaddresses">turbo.networking.routing.addresses</a></h2>
+<p>Addresses of the router.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;dn4&quot;:null,&quot;dn6&quot;:null,&quot;v4&quot;:null,&quot;v6&quot;:null}
+</code></pre>
+<h2 id="turbonetworkingroutingaddressesdn4"><a class="header" href="#turbonetworkingroutingaddressesdn4">turbo.networking.routing.addresses.dn4</a></h2>
+<p>DN42 IPv4 Address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingaddressesdn6"><a class="header" href="#turbonetworkingroutingaddressesdn6">turbo.networking.routing.addresses.dn6</a></h2>
+<p>DN42 IPv6 Address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingaddressesv4"><a class="header" href="#turbonetworkingroutingaddressesv4">turbo.networking.routing.addresses.v4</a></h2>
+<p>IPv4 Address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingaddressesv6"><a class="header" href="#turbonetworkingroutingaddressesv6">turbo.networking.routing.addresses.v6</a></h2>
+<p>IPv6 Address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingasns"><a class="header" href="#turbonetworkingroutingasns">turbo.networking.routing.asns</a></h2>
+<p>ASNs of the router.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<h2 id="turbonetworkingroutingasnsdfz"><a class="header" href="#turbonetworkingroutingasnsdfz">turbo.networking.routing.asns.dfz</a></h2>
+<p>Internet ASN</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingroutingasnsdn42"><a class="header" href="#turbonetworkingroutingasnsdn42">turbo.networking.routing.asns.dn42</a></h2>
+<p>DN42 ASN</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingroutingbird2baseconfig"><a class="header" href="#turbonetworkingroutingbird2baseconfig">turbo.networking.routing.bird2.baseConfig</a></h2>
+<p>Base config package</p>
+<p>${baseConfig}/bird.conf will be included in the
+final configurations.</p>
+<p><em><em>Type</em></em>:
+package</p>
+<h2 id="turbonetworkingroutingbird2bgpsessions"><a class="header" href="#turbonetworkingroutingbird2bgpsessions">turbo.networking.routing.bird2.bgpSessions</a></h2>
+<p>BGP protocol instances</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameaddpaths"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameaddpaths">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.addPaths</a></h2>
+<p>Whether to enable the add-path/multipath extension</p>
+<p><em><em>Type</em></em>:
+boolean or one of &quot;off&quot;, &quot;on&quot;, &quot;rx&quot;, &quot;tx&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;rx&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamedescription"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamedescription">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameexportfilter"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameexportfilter">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.exportFilter</a></h2>
+<p>Replace or add to the default export filter</p>
+<p>Take care when using it for iBGP.</p>
+<p><em><em>Type</em></em>:
+string or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;append&quot;:&quot;&quot;,&quot;prepend&quot;:&quot;&quot;}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameextrachannelconfigs"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameextrachannelconfigs">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.extraChannelConfigs</a></h2>
+<p>Extra configurations for channel</p>
+<p><em><em>Type</em></em>:
+attribute set of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameextraconfigs"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameextraconfigs">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.extraConfigs</a></h2>
+<p>Extra configurations</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameextraparams"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameextraparams">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.extraParams</a></h2>
+<p>Extra params to be used 
+(Ignored by IBGP)</p>
+<p><em><em>Type</em></em>:
+list of list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;[ [\&quot;MISC\&quot; \&quot;MISC_DONT_REWRITE_NEXTHOP\&quot;] ]&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameibgp"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameibgp">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.iBgp</a></h2>
+<p>This session is an iBGP session.</p>
+<p>If true, most other options will be ignored.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameibgpexportexternal"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameibgpexportexternal">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.ibgpExportExternal</a></h2>
+<p>Export external routes to iBGP peer</p>
+<p>If disabled, we only export our own and downstreams'
+routes.</p>
+<p>Ignored for eBGP.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameimportfilter"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameimportfilter">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.importFilter</a></h2>
+<p>Replace or add to the default import filter</p>
+<p>Take care when using it for iBGP.</p>
+<p><em><em>Type</em></em>:
+string or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;append&quot;:&quot;&quot;,&quot;prepend&quot;:&quot;&quot;}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamelocalas"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamelocalas">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.localAS</a></h2>
+<p>Local ASN</p>
+<p>Ignored for iBGP (will always use IBGP_ASN).</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamelocalpref"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamelocalpref">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.localPref</a></h2>
+<p>Default local-pref value to apply</p>
+<p>Ignored for iBGP. null means use default.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamemultihop"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamemultihop">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.multihop</a></h2>
+<p>Whether to use multihop or not</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+boolean or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>2
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameneighbor"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameneighbor">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.neighbor</a></h2>
+<p>Peer endpoint</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamenetwork"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamenetwork">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.network</a></h2>
+<p>Network</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+one of &quot;dfz&quot;, &quot;dn42&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;dfz&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamenexthopkeep"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamenexthopkeep">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.nextHopKeep</a></h2>
+<p>Channels to activate <code>next hop keep</code> for</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+list of one of &quot;ipv4&quot;, &quot;ipv6&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamepassword"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamepassword">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.password</a></h2>
+<p>MD5 password to use</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamepeeras"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamepeeras">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.peerAS</a></h2>
+<p>Peer ASN</p>
+<p>Ignored for iBGP (will always use IBGP_ASN).</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameprefixes"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameprefixes">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.prefixes</a></h2>
+<p>List of prefixes to accept. If empty, don't enable prefix list ACL.</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>[&quot;1.2.3.0/24&quot;]
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnameprotocols"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnameprotocols">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.protocols</a></h2>
+<p>Protocols to enable</p>
+<p>Ignored for iBGP. Both IPv4 and IPv6 are always enabled.</p>
+<p><em><em>Type</em></em>:
+list of one of &quot;ipv4&quot;, &quot;ipv6&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;ipv4&quot;,&quot;ipv6&quot;]
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamerealpeeras"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamerealpeeras">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.realPeerAS</a></h2>
+<p>Real peer ASN for purpose of filtering</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamerelationship"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamerelationship">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.relationship</a></h2>
+<p>Relationship</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+one of &quot;upstream&quot;, &quot;downstream&quot;, &quot;peer&quot;, &quot;ixp&quot;, &quot;collector&quot;, &quot;bilateral&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;peer&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamerr"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamerr">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.rr</a></h2>
+<p>We are a route reflector</p>
+<p>Also consider turning on addPaths. RR should at least do tx, and clients should rx.</p>
+<p>Ignored for eBGP.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingbird2bgpsessionsnamesourceaddress"><a class="header" href="#turbonetworkingroutingbird2bgpsessionsnamesourceaddress">turbo.networking.routing.bird2.bgpSessions.&lt;name&gt;.sourceAddress</a></h2>
+<p>Source address to connect with</p>
+<p>Ignored for iBGP.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2birdpackage"><a class="header" href="#turbonetworkingroutingbird2birdpackage">turbo.networking.routing.bird2.birdPackage</a></h2>
+<p>The BIRD 2 package to use</p>
+<p><em><em>Type</em></em>:
+package</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;derivation&quot;,&quot;name&quot;:&quot;bird-2.0.10&quot;}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2communityasn"><a class="header" href="#turbonetworkingroutingbird2communityasn">turbo.networking.routing.bird2.communityAsn</a></h2>
+<p>The ASN used for public control communities</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>12345
+</code></pre>
+<h2 id="turbonetworkingroutingbird2enable"><a class="header" href="#turbonetworkingroutingbird2enable">turbo.networking.routing.bird2.enable</a></h2>
+<p>Run bird2 on this machine</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingbird2extraconfigs"><a class="header" href="#turbonetworkingroutingbird2extraconfigs">turbo.networking.routing.bird2.extraConfigs</a></h2>
+<p>Extra configurations</p>
+<p><em><em>Type</em></em>:
+strings concatenated with &quot;\n&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ibgpasn"><a class="header" href="#turbonetworkingroutingbird2ibgpasn">turbo.networking.routing.bird2.iBgpAsn</a></h2>
+<p>The ASN used for iBGP sessions</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>12345
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ibgp"><a class="header" href="#turbonetworkingroutingbird2ibgp">turbo.networking.routing.bird2.ibgp</a></h2>
+<p>Set up iBGP sessions</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbonetworkingroutingbird2numericid"><a class="header" href="#turbonetworkingroutingbird2numericid">turbo.networking.routing.bird2.numericId</a></h2>
+<p>The numeric ID for community tagging</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>0
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;1.2.3.4&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocols"><a class="header" href="#turbonetworkingroutingbird2ospfprotocols">turbo.networking.routing.bird2.ospfProtocols</a></h2>
+<p>OSPF protocol instances</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareas"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareas">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas</a></h2>
+<p>Areas</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;backbone&quot;:{&quot;id&quot;:0}}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameextraconfigs"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameextraconfigs">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.extraConfigs</a></h2>
+<p>Extra area configurations</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameid"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameid">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.id</a></h2>
+<p>Area ID</p>
+<p>Can be an integer or an IPv4 address, like routerId.</p>
+<p><em><em>Type</em></em>:
+string or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0.0.0.0&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfaces"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfaces">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces</a></h2>
+<p>Interfaces</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameauthentication"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameauthentication">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.authentication</a></h2>
+<p>OSPF authentication type</p>
+<p>For null, the field will be entirely omitted
+if <code>password</code> is also null. Otherwise, 
+&quot;authentication cryptographic;&quot; will be
+emitted. Leave both this field and <code>password</code>
+null if you wish to configure authentication
+in <code>extraConfigs</code>.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;auto&quot;, &quot;none&quot;, &quot;cryptographic&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamecost"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamecost">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.cost</a></h2>
+<p>Cost</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>10
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameextraconfigs"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameextraconfigs">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.extraConfigs</a></h2>
+<p>Extra area configurations</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameinstance"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameinstance">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.instance</a></h2>
+<p>Instance ID</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameinterfaces"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnameinterfaces">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.interfaces</a></h2>
+<p>Interface pattern(s)</p>
+<p>Leave empty to use the name of this section as the
+interface name.</p>
+<p><em><em>Type</em></em>:
+null or list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamepassword"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamepassword">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.password</a></h2>
+<p>OSPF password</p>
+<p>If you want to specify other options like
+the algorithm, leave this field and <code>authentication</code>
+null and use extraConfigs :)</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamestub"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamestub">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.stub</a></h2>
+<p>Stub interface</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnamestub"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnamestub">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.stub</a></h2>
+<p>Stub area</p>
+<p><em><em>Type</em></em>:
+one of &quot;no&quot;, &quot;stub&quot;, &quot;nssa&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;no&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnamedescription"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnamedescription">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameextrachannelconfigs"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameextrachannelconfigs">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.extraChannelConfigs</a></h2>
+<p>Extra channel configurations</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameextraconfigs"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameextraconfigs">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.extraConfigs</a></h2>
+<p>Extra configurations</p>
+<p><em><em>Type</em></em>:
+strings concatenated with &quot;\n&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameprotocol"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameprotocol">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.protocol</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+one of &quot;ipv4&quot;, &quot;ipv6&quot;</p>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameversion"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameversion">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.version</a></h2>
+<p>Version</p>
+<p><em><em>Type</em></em>:
+one of <null>, &quot;v2&quot;, &quot;v3&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ownprefixes4"><a class="header" href="#turbonetworkingroutingbird2ownprefixes4">turbo.networking.routing.bird2.ownPrefixes4</a></h2>
+<p>IPv4 prefixes that we own</p>
+<p>We expect not to receive those prefixes over eBGP.</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;0.0.0.0/32&quot;]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>[&quot;1.2.3.0/24&quot;]
+</code></pre>
+<h2 id="turbonetworkingroutingbird2ownprefixes6"><a class="header" href="#turbonetworkingroutingbird2ownprefixes6">turbo.networking.routing.bird2.ownPrefixes6</a></h2>
+<p>IPv6 prefixes that we own</p>
+<p>We expect not to receive those prefixes over eBGP.</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;::/128&quot;]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>[&quot;fd42:1234:5678::/48&quot;]
+</code></pre>
+<h2 id="turbonetworkingroutingbird2routerid"><a class="header" href="#turbonetworkingroutingbird2routerid">turbo.networking.routing.bird2.routerId</a></h2>
+<p>The router ID</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;1.2.3.4&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2staticprotocols"><a class="header" href="#turbonetworkingroutingbird2staticprotocols">turbo.networking.routing.bird2.staticProtocols</a></h2>
+<p>Static protocol instances</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnamedescription"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnamedescription">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.description</a></h2>
+<p>Description</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnameextrachannelconfigs"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnameextrachannelconfigs">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.extraChannelConfigs</a></h2>
+<p>Extra channel configurations</p>
+<p><em><em>Type</em></em>:
+strings concatenated with &quot;\n&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnameimportfilter"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnameimportfilter">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.importFilter</a></h2>
+<p>Replace or add to the default import filter</p>
+<p><em><em>Type</em></em>:
+string or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;append&quot;:&quot;&quot;,&quot;prepend&quot;:&quot;&quot;}
+</code></pre>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnameprotocol"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnameprotocol">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.protocol</a></h2>
+<p>Protocol</p>
+<p><em><em>Type</em></em>:
+one of &quot;ipv4&quot;, &quot;ipv6&quot;</p>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnameroutes"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnameroutes">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.routes</a></h2>
+<p>Routes</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<h2 id="turbonetworkingroutingbird2staticprotocolsnametable"><a class="header" href="#turbonetworkingroutingbird2staticprotocolsnametable">turbo.networking.routing.bird2.staticProtocols.&lt;name&gt;.table</a></h2>
+<p>Table</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingcore"><a class="header" href="#turbonetworkingroutingcore">turbo.networking.routing.core</a></h2>
+<p>Whether this router is a core router.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpenable"><a class="header" href="#turbonetworkingroutingdhcpenable">turbo.networking.routing.dhcp.enable</a></h2>
+<p>Whether to enable an dhcp modules</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpenableipxe"><a class="header" href="#turbonetworkingroutingdhcpenableipxe">turbo.networking.routing.dhcp.enableIpxe</a></h2>
+<p>Whether to enable IPXE</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpinterfaces"><a class="header" href="#turbonetworkingroutingdhcpinterfaces">turbo.networking.routing.dhcp.interfaces</a></h2>
+<p>A list of interface names</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;[ \&quot;iot\&quot; \&quot;guest\&quot; \&quot;management\&quot; \&quot;ap\&quot; \&quot;sensitive\&quot; ];\n&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnets"><a class="header" href="#turbonetworkingroutingdhcpsubnets">turbo.networking.routing.dhcp.subnets</a></h2>
+<p>A list of subnets configs</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;{\n  interface = \&quot;main\&quot;;\n  ip = \&quot;192.168.1.0\&quot;;\n  netmask = \&quot;255.255.255.0\&quot;;\n  rangeBegin = \&quot;192.168.1.10\&quot;;\n  rangeEnd = \&quot;192.168.1.200\&quot;;\n  dns = \&quot;1.1.1.1, 1.0.0.1\&quot;;\n  router = \&quot;192.168.1.1\&quot;;\n\n  hosts = [\n    ## Devices\n    { name = \&quot;SomeDevice\&quot;;\n      mac = \&quot;66:cd:f9:97:98:04\&quot;;\n      address =  \&quot;192.168.1.5\&quot;;\n    }\n  ];\n}\n&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsdns"><a class="header" href="#turbonetworkingroutingdhcpsubnetsdns">turbo.networking.routing.dhcp.subnets.*.dns</a></h2>
+<p>DHCP assigned DNS</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;1.1.1.1, 1.0.0.1\n&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsextraconfig"><a class="header" href="#turbonetworkingroutingdhcpsubnetsextraconfig">turbo.networking.routing.dhcp.subnets.*.extraConfig</a></h2>
+<p>Extra config to append</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshosts"><a class="header" href="#turbonetworkingroutingdhcpsubnetshosts">turbo.networking.routing.dhcp.subnets.*.hosts</a></h2>
+<p>List of host definition in this subnet</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsaddress"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsaddress">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.address</a></h2>
+<p>Assigned IP address</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsdns"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsdns">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.dns</a></h2>
+<p>DHCP DNS Assignment</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsextraoptions"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsextraoptions">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.extraOptions</a></h2>
+<p>Extra configs to append to host config</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsmac"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsmac">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.mac</a></h2>
+<p>Device MAC Address</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;66:cd:f9:97:98:04&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsname"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsname">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.name</a></h2>
+<p>Assigned device name</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingroutingdhcpsubnetshostsrouter"><a class="header" href="#turbonetworkingroutingdhcpsubnetshostsrouter">turbo.networking.routing.dhcp.subnets.<em>.hosts.</em>.router</a></h2>
+<p>DHCP router assignment</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsinterface"><a class="header" href="#turbonetworkingroutingdhcpsubnetsinterface">turbo.networking.routing.dhcp.subnets.*.interface</a></h2>
+<p>list of interface name to apply</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsip"><a class="header" href="#turbonetworkingroutingdhcpsubnetsip">turbo.networking.routing.dhcp.subnets.*.ip</a></h2>
+<p>IP CIDR</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;192.168.1.0&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsipxefile"><a class="header" href="#turbonetworkingroutingdhcpsubnetsipxefile">turbo.networking.routing.dhcp.subnets.*.ipxeFile</a></h2>
+<p>IPXE file</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;https://boot.netboot.xyz\n&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsnetmask"><a class="header" href="#turbonetworkingroutingdhcpsubnetsnetmask">turbo.networking.routing.dhcp.subnets.*.netmask</a></h2>
+<p>Netmask Range</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;255.255.255.0&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsrangebegin"><a class="header" href="#turbonetworkingroutingdhcpsubnetsrangebegin">turbo.networking.routing.dhcp.subnets.*.rangeBegin</a></h2>
+<p>IP pool start IP</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;192.168.1.5&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsrangeend"><a class="header" href="#turbonetworkingroutingdhcpsubnetsrangeend">turbo.networking.routing.dhcp.subnets.*.rangeEnd</a></h2>
+<p>IP pool end IP</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;192.168.1.150&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetsrouter"><a class="header" href="#turbonetworkingroutingdhcpsubnetsrouter">turbo.networking.routing.dhcp.subnets.*.router</a></h2>
+<p>DHCP router IP</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;192.168.1.1&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingdhcpsubnetstftpserver"><a class="header" href="#turbonetworkingroutingdhcpsubnetstftpserver">turbo.networking.routing.dhcp.subnets.*.tftpServer</a></h2>
+<p>tftp server IP</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;172.16.0.1&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingenable"><a class="header" href="#turbonetworkingroutingenable">turbo.networking.routing.enable</a></h2>
+<p>Whether to use this machine as a router.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingjoolenable"><a class="header" href="#turbonetworkingroutingjoolenable">turbo.networking.routing.jool.enable</a></h2>
+<p>Run Jool, a NAT64 gateway, on this machine</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingjoolinstances"><a class="header" href="#turbonetworkingroutingjoolinstances">turbo.networking.routing.jool.instances</a></h2>
+<p>A set of NAT64 instances to run</p>
+<p>Configure SIIT instances in siitInstances.</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingroutingjoolinstancesnameconfig"><a class="header" href="#turbonetworkingroutingjoolinstancesnameconfig">turbo.networking.routing.jool.instances.&lt;name&gt;.config</a></h2>
+<p>The JSON configuration file</p>
+<p>See https://jool.mx/en/config-atomic.html for examples.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingroutingname"><a class="header" href="#turbonetworkingroutingname">turbo.networking.routing.name</a></h2>
+<p>Name of the router.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingngtun"><a class="header" href="#turbonetworkingroutingngtun">turbo.networking.routing.ngtun</a></h2>
+<p>Enable ngtun configurations.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbonetworkingroutingregion"><a class="header" href="#turbonetworkingroutingregion">turbo.networking.routing.region</a></h2>
+<p>Physical region of the router.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;eu&quot;, &quot;na_e&quot;, &quot;na_c&quot;, &quot;na_w&quot;, &quot;ap_e&quot;, &quot;ap_o&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingroutingrtrenable"><a class="header" href="#turbonetworkingroutingrtrenable">turbo.networking.routing.rtr.enable</a></h2>
+<p>Run RPKI RTR daemon</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingroutingrtrport"><a class="header" href="#turbonetworkingroutingrtrport">turbo.networking.routing.rtr.port</a></h2>
+<p>Port to listen on</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>8282
+</code></pre>
+<h2 id="turbonetworkingroutingrtrpublickey"><a class="header" href="#turbonetworkingroutingrtrpublickey">turbo.networking.routing.rtr.publicKey</a></h2>
+<p>Path to RPKI cache signing key</p>
+<p><em><em>Type</em></em>:
+path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;/nix/store/d5s2mvxp9jb1sclqjsrm78f2d9lk0in4-cf.pub&quot;
+</code></pre>
+<h2 id="turbonetworkingroutingstub"><a class="header" href="#turbonetworkingroutingstub">turbo.networking.routing.stub</a></h2>
+<p>Whether this router is a stub router.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbonetworkingwireguardbackend"><a class="header" href="#turbonetworkingwireguardbackend">turbo.networking.wireguard.backend</a></h2>
+<p>Backend to use</p>
+<p>Defaults to userspace (boringtun) for containers, and
+kernel (systemd-networkd) otherwise.</p>
+<p><em><em>Type</em></em>:
+one of &quot;kernel&quot;, &quot;userspace&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;literalExpression&quot;,&quot;text&quot;:&quot;if config.boot.isContainer then \&quot;userspace\&quot; else \&quot;kernel\&quot;&quot;}
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnels"><a class="header" href="#turbonetworkingwireguardtunnels">turbo.networking.wireguard.tunnels</a></h2>
+<p>Tunnels</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnelsnamefwmark"><a class="header" href="#turbonetworkingwireguardtunnelsnamefwmark">turbo.networking.wireguard.tunnels.&lt;name&gt;.fwMark</a></h2>
+<p>Firewall mark</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingwireguardtunnelsnamelistenport"><a class="header" href="#turbonetworkingwireguardtunnelsnamelistenport">turbo.networking.wireguard.tunnels.&lt;name&gt;.listenPort</a></h2>
+<p>Port to listen on</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbonetworkingwireguardtunnelsnamepeers"><a class="header" href="#turbonetworkingwireguardtunnelsnamepeers">turbo.networking.wireguard.tunnels.&lt;name&gt;.peers</a></h2>
+<p>Peers</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<h2 id="turbonetworkingwireguardtunnelsnamepeersallowedips"><a class="header" href="#turbonetworkingwireguardtunnelsnamepeersallowedips">turbo.networking.wireguard.tunnels.&lt;name&gt;.peers.*.allowedIPs</a></h2>
+<p>Allowed IPs</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnelsnamepeersendpoint"><a class="header" href="#turbonetworkingwireguardtunnelsnamepeersendpoint">turbo.networking.wireguard.tunnels.&lt;name&gt;.peers.*.endpoint</a></h2>
+<p>Endpoint</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnelsnamepeerspersistentkeepalive"><a class="header" href="#turbonetworkingwireguardtunnelsnamepeerspersistentkeepalive">turbo.networking.wireguard.tunnels.&lt;name&gt;.peers.*.persistentKeepalive</a></h2>
+<p>Value of PersistentKeepalive</p>
+<p>0 means persistent keep-alive is disabled.</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>0
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnelsnamepeerspublickey"><a class="header" href="#turbonetworkingwireguardtunnelsnamepeerspublickey">turbo.networking.wireguard.tunnels.&lt;name&gt;.peers.*.publicKey</a></h2>
+<p>Peer public key</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbonetworkingwireguardtunnelsnameprivatekey"><a class="header" href="#turbonetworkingwireguardtunnelsnameprivatekey">turbo.networking.wireguard.tunnels.&lt;name&gt;.privateKey</a></h2>
+<p>Our private key</p>
+<p><em><em>Type</em></em>:
+string</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="storage-options"><a class="header" href="#storage-options">Storage Options</a></h1>
+<!--
+    The following is injected by the build system
+
+    Looking to improve the descriptions? Head to `modules/storage` in the repo :)
+-->
+<h2 id="turbostoragezfsautoscrub"><a class="header" href="#turbostoragezfsautoscrub">turbo.storage.zfs.autoScrub</a></h2>
+<p>whether to enable ZFS auto scrub for given storage. This is suggested to keep data integraty</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;literalExpression&quot;,&quot;text&quot;:&quot;any (d: d.fsType == \&quot;zfs\&quot;) (attrValues config.fileSystems);&quot;}
+</code></pre>
+<h2 id="turbostoragezfsblock"><a class="header" href="#turbostoragezfsblock">turbo.storage.zfs.block</a></h2>
+<p>This section is used to manage Client's block storage on Hosting machine.
+Block stated here will be mounted with recommended block storage strategy and policy applied.</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;\&quot;user1-dataset1\&quot; = {\n    source = \&quot;tank/user/dataset-1\&quot;;\n};\n&quot;
+</code></pre>
+<h2 id="turbostoragezfsblocknamedestination"><a class="header" href="#turbostoragezfsblocknamedestination">turbo.storage.zfs.block.&lt;name&gt;.destination</a></h2>
+<p>Mount point destination</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;literalExpression&quot;,&quot;text&quot;:&quot;/${config.source}&quot;}
+</code></pre>
+<h2 id="turbostoragezfsblocknameextraoptions"><a class="header" href="#turbostoragezfsblocknameextraoptions">turbo.storage.zfs.block.&lt;name&gt;.extraOptions</a></h2>
+<p>Extra options to pass to FileSystems.options</p>
+<p><em><em>Type</em></em>:
+list of string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="turbostoragezfsblocknamesecurity"><a class="header" href="#turbostoragezfsblocknamesecurity">turbo.storage.zfs.block.&lt;name&gt;.security</a></h2>
+<p>By default, we do not allow guest file exec on host machine</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbostoragezfsblocknamesource"><a class="header" href="#turbostoragezfsblocknamesource">turbo.storage.zfs.block.&lt;name&gt;.source</a></h2>
+<p>Data set name</p>
+<p><em><em>Type</em></em>:
+string</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="virtualization-options"><a class="header" href="#virtualization-options">Virtualization Options</a></h1>
+<!--
+    The following is injected by the build system
+
+    Looking to improve the descriptions? Head to `modules/virtualization` in the repo :)
+-->
+<h2 id="turbovirtualizationlibvirtdomains"><a class="header" href="#turbovirtualizationlibvirtdomains">turbo.virtualization.libvirt.domains</a></h2>
+<p>Set of Domains(Machines) defined on Host</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputune"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputune">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune</a></h2>
+<p>CPU Tune</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputuneperiod"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputuneperiod">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.period</a></h2>
+<p>Enforcement period (us)
+Within each <code>period</code> the vCPU cannot consume more
+than <code>quota</code> worth of runtime.
+This is applied per vCPU.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputunequota"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputunequota">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.quota</a></h2>
+<p>vCPU quota (us)
+Within each <code>period</code> the vCPU cannot consume more
+than <code>quota</code> worth of runtime.
+A negative value means no limits will be applied.
+This is applied per vCPU.</p>
+<p><em><em>Type</em></em>:
+null or 32 bit signed integer; between -2147483648 and 2147483647 (both inclusive)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamecputuneshares"><a class="header" href="#turbovirtualizationlibvirtdomainsnamecputuneshares">turbo.virtualization.libvirt.domains.&lt;name&gt;.cputune.shares</a></h2>
+<p>CPU shares
+Relative CPU weight of the machine.
+Use <code>period</code> and <code>quota</code> to enforce hard limits
+to CPU usage.</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevices"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevices">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices</a></h2>
+<p>device type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsole"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsole">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console</a></h2>
+<p>console</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.source</a></h2>
+<p>sub source resource</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenamesourcepath"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenamesourcepath">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.source.path</a></h2>
+<p>Device Path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/dev/pts/4&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target</a></h2>
+<p>N/A</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametargetport"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametargetport">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target.port</a></h2>
+<p>N/A</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametargettype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametargettype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.target.type</a></h2>
+<p>serial (described below); virtio (usable whenever VirtIO support is available); xen, lxc and openvz (available when the corresponding hypervisor is in use). sclp and sclplm (usable for s390 and s390x QEMU guests) are supported for compatibility reasons but should not be used for new guests: use the sclpconsole and sclplmconsole target models, respectively, with the serial element instead.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;serial&quot;, &quot;virtio&quot;, &quot;xen&quot;, &quot;lxc&quot;, &quot;openvz&quot;, &quot;sclp&quot;, &quot;sclplm&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesconsolenametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesconsolenametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.console.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or value &quot;pty&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pty&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisk"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisk">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk</a></h2>
+<p>disk</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedevice"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedevice">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.device</a></h2>
+<p>device type</p>
+<p><em><em>Type</em></em>:
+one of &quot;floppy&quot;, &quot;disk&quot;, &quot;cdrom&quot;, &quot;lun&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;disk&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedriver"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedriver">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivername"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivername">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver.name</a></h2>
+<p>If the hypervisor supports multiple backend drivers, then the name attribute selects the primary backend driver name, while the optional type attribute provides the sub-type. For example, xen supports a name of &quot;tap&quot;, &quot;tap2&quot;, &quot;phy&quot;, or &quot;file&quot;, with a type of &quot;aio&quot;, while qemu only supports a name of &quot;qemu&quot;, but multiple types including &quot;raw&quot;, &quot;bochs&quot;, &quot;qcow2&quot;, and &quot;qed&quot;.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;qemu&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamedrivertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.driver.type</a></h2>
+<p>see name</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;qcow2&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamereadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamereadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.readonly</a></h2>
+<p>If present, this indicates the device cannot be modified by the guest. For now, this is the default for disks with attribute device='cdrom'.</p>
+<p><em><em>Type</em></em>:
+null or boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknamesourcefile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknamesourcefile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.source.file</a></h2>
+<p>File Path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametargetbus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametargetbus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target.bus</a></h2>
+<p>If omitted, the bus type is inferred from the style of the device name (e.g. a device named 'sda' will typically be exported using a SCSI bus).</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ide&quot;, &quot;scsi&quot;, &quot;virtio&quot;, &quot;xen&quot;, &quot;usb&quot;, &quot;sata&quot;, &quot;sd&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametargetdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametargetdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.target.dev</a></h2>
+<p>The dev attribute indicates the &quot;logical&quot; device name. The actual device name specified is not guaranteed to map to the device name in the guest OS. Treat it as a device ordering hint. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;vda&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesdisknametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesdisknametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.disk.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+one of &quot;file&quot;, &quot;block&quot;, &quot;dir&quot;, &quot;network&quot;, &quot;volume&quot;, &quot;nvme&quot;, &quot;vhostuser&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;file&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesextraconfig"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesextraconfig">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.extraConfig</a></h2>
+<p>XML to insert</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystem"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystem">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem</a></h2>
+<p>filesystem</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnameaccessmode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnameaccessmode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.accessmode</a></h2>
+<p>Access mode</p>
+<p><em><em>Type</em></em>:
+one of &quot;passthrough&quot;, &quot;mapped&quot;, &quot;squash&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;mapped&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinary"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinary">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarycachemode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarycachemode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.cacheMode</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;none&quot;, &quot;always&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;always&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylock"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylock">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockflock"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockflock">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock.flock</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockposix"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarylockposix">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.lock.posix</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarypath"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinarypath">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.path</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinaryxattr"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamebinaryxattr">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.binary.xattr</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriver"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriver">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriverformat"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedriverformat">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver.format</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;raw&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedrivertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamedrivertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.driver.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+one of &quot;path&quot;, &quot;loop&quot;, &quot;virtiofs&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamereadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamereadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.readonly</a></h2>
+<p>Is media read only</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcedir"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcedir">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.dir</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/path&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcefile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcefile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.file</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/export/to/guest.img&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcesocket"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnamesourcesocket">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.source.socket</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/tmp/sock&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametargetdir"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametargetdir">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.target.dir</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/import/from/host&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesfilesystemnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.filesystem.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;mount&quot;, &quot;file&quot;, &quot;block&quot;, &quot;ram&quot;, &quot;bind&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphics"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphics">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics</a></h2>
+<p>graphics</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelisten"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelisten">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistensocket"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistensocket">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen.socket</a></h2>
+<p>socket path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/run/hypervisor/vnc/server-1&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+one of &quot;address&quot;, &quot;socket&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;sdl&quot;, &quot;vnc&quot;, &quot;spice&quot;, &quot;rdp&quot;, &quot;desktop&quot;, &quot;egl-headless&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev</a></h2>
+<p>hostdev</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.managed</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;yes&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamemode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.mode</a></h2>
+<p>mode</p>
+<p><em><em>Type</em></em>:
+value &quot;subsystem&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;subsystem&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerom"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerom">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerombar"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamerombar">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom.bar</a></h2>
+<p>bar</p>
+<p><em><em>Type</em></em>:
+one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;on&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnameromfile"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnameromfile">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.rom.file</a></h2>
+<p>socket path</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddress"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddress">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressbus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressbus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.bus</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x06&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressdomain"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressdomain">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.domain</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;0x0000&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressfunction"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressfunction">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.function</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressslot"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourceaddressslot">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.address.slot</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0x02&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourcewritefiltering"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnamesourcewritefiltering">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.source.writeFiltering</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedeviceshostdevnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedeviceshostdevnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.hostdev.&lt;name&gt;.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+value &quot;pci&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pci&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinput"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinput">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input</a></h2>
+<p>input</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamebus"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamebus">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.bus</a></h2>
+<p>input bus</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;xen&quot;, &quot;ps2&quot;, &quot;usb&quot;, &quot;virtio&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source</a></h2>
+<p>sub source resource</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcedev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcedev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.dev</a></h2>
+<p>boot device</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrab"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrab">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.grab</a></h2>
+<p>attributes grab with value 'all' which when enabled grabs all input devices instead of just one</p>
+<p><em><em>Type</em></em>:
+null or value &quot;all&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrabtoggle"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcegrabtoggle">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.grabToggle</a></h2>
+<p>change the grab key combination</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ctrl-ctrl&quot;, &quot;alt-alt&quot;, &quot;shift-shift&quot;, &quot;meta-meta&quot;, &quot;scrolllock&quot;, &quot;ctrl-scrolllock&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcerepeat"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnamesourcerepeat">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.source.repeat</a></h2>
+<p>repeat with value 'on'/'off' to enable/disable auto-repeat events </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;on&quot;, &quot;off&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinputnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinputnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.input.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;mouse&quot;, &quot;tablet&quot;, &quot;keyboard&quot;, &quot;passthrough&quot;, &quot;evdev&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterface"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterface">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface</a></h2>
+<p>interface</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemac"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemac">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.mac</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemacaddress"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemacaddress">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.mac.address</a></h2>
+<p>device mac address</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;52:54:00:5d:c7:9e&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.managed</a></h2>
+<p>managed attr</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.model</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodeltype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamemodeltype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.model.type</a></h2>
+<p><em><em>Type</em></em>:
+value &quot;virtio&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;virtio&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesource"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesource">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.source</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesourcebridge"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenamesourcebridge">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.source.bridge</a></h2>
+<p>Bridged Interface</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetdev"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetdev">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target.dev</a></h2>
+<p>device name</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;v-server&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetmanaged"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametargetmanaged">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.target.managed</a></h2>
+<p>managed attr</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesinterfacenametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesinterfacenametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.interface.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;ethernet&quot;, &quot;network&quot;, &quot;direct&quot;, &quot;bridge&quot;, &quot;user&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserial"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserial">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial</a></h2>
+<p>serial</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametarget"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametarget">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.model</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodelname"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetmodelname">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.model.name</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;isa-serial&quot;, &quot;16550a&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;isa-serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargetport"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargetport">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.port</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;0&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametargettype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametargettype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.target.type</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;system-serial&quot;, &quot;isa-serial&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;isa-serial&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesserialnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesserialnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.serial.&lt;name&gt;.type</a></h2>
+<p>input type</p>
+<p><em><em>Type</em></em>:
+null or value &quot;pty&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;pty&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameextraconfig"><a class="header" href="#turbovirtualizationlibvirtdomainsnameextraconfig">turbo.virtualization.libvirt.domains.&lt;name&gt;.extraConfig</a></h2>
+<p>extra xml to add in domain</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeatures"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeatures">turbo.virtualization.libvirt.domains.&lt;name&gt;.features</a></h2>
+<p>feature type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeaturesacpi"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeaturesacpi">turbo.virtualization.libvirt.domains.&lt;name&gt;.features.acpi</a></h2>
+<p>ACPI is useful for power management, for example, with KVM guests it is required for graceful shutdown to work.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamefeaturesapic"><a class="header" href="#turbovirtualizationlibvirtdomainsnamefeaturesapic">turbo.virtualization.libvirt.domains.&lt;name&gt;.features.apic</a></h2>
+<p>APIC allows the use of programmable IRQ management. Since 0.10.2 (QEMU only) there is an optional attribute eoi with values on and off which toggles the availability of EOI (End of Interrupt) for the guest.</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememory"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememory">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory</a></h2>
+<p>memory</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorysize"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorysize">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory.size</a></h2>
+<p>The maximum allocation of memory for the guest at boot time. The memory allocation includes possible additional memory devices specified at start or hotplugged later.</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Example</em></em></p>
+<pre><code>524288
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememoryunit"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememoryunit">turbo.virtualization.libvirt.domains.&lt;name&gt;.memory.unit</a></h2>
+<p>defaults to &quot;KiB&quot; (kibibytes, 210 or blocks of 1024 bytes).
+Valid units are &quot;b&quot; or &quot;bytes&quot; for bytes, 
+&quot;KB&quot; for kilobytes (103 or 1,000 bytes), 
+&quot;k&quot; or &quot;KiB&quot; for kibibytes (1024 bytes), 
+&quot;MB&quot; for megabytes (106 or 1,000,000 bytes), 
+&quot;M&quot; or &quot;MiB&quot; for mebibytes (220 or 1,048,576 bytes),
+&quot;GB&quot; for gigabytes (109 or 1,000,000,000 bytes), 
+&quot;G&quot; or &quot;GiB&quot; for gibibytes (230 or 1,073,741,824 bytes), 
+&quot;TB&quot; for terabytes (1012 or 1,000,000,000,000 bytes), 
+or &quot;T&quot; or &quot;TiB&quot; for tebibytes (240 or 1,099,511,627,776 bytes). 
+However, the value will be rounded up to the nearest kibibyte by libvirt, 
+and may be further rounded to the granularity supported by the hypervisor. </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;b&quot;, &quot;bytes&quot;, &quot;k&quot;, &quot;KiB&quot;, &quot;MB&quot;, &quot;M&quot;, &quot;MiB&quot;, &quot;GB&quot;, &quot;G&quot;, &quot;GiB&quot;, &quot;TB&quot;, &quot;T&quot;, &quot;TiB&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;KiB&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybacking"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybacking">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking</a></h2>
+<p>Memory Backing</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybackingaccessmode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybackingaccessmode">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking.accessMode</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+one of &quot;shared&quot;, &quot;private&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;shared&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamememorybackingsourcetype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamememorybackingsourcetype">turbo.virtualization.libvirt.domains.&lt;name&gt;.memoryBacking.sourceType</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;memfd&quot;, &quot;file&quot;, &quot;anonymous&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameos"><a class="header" href="#turbovirtualizationlibvirtdomainsnameos">turbo.virtualization.libvirt.domains.&lt;name&gt;.os</a></h2>
+<p>OS setting</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosbootorder"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosbootorder">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.bootOrder</a></h2>
+<p>Boot order</p>
+<p><em><em>Type</em></em>:
+list of one of &quot;fd&quot;, &quot;hd&quot;, &quot;cdrom&quot;, &quot;network&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[&quot;hd&quot;,&quot;cdrom&quot;]
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosenablebootmenu"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosenablebootmenu">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.enableBootMenu</a></h2>
+<p>Boot Menu</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosfirmware"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosfirmware">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.firmware</a></h2>
+<p>System firmware</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;bios&quot;, &quot;efi&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloader"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloader">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader</a></h2>
+<p>Loader Option</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloaderpath"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloaderpath">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.path</a></h2>
+<p>BIOS Path</p>
+<p><em><em>Type</em></em>:
+path</p>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloaderreadonly"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloaderreadonly">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.readonly</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloadersecure"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloadersecure">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.secure</a></h2>
+<p>Secure BOOT</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;yes&quot;, &quot;no&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameosloadertype"><a class="header" href="#turbovirtualizationlibvirtdomainsnameosloadertype">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.loader.type</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or one of &quot;rom&quot;, &quot;pflash&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostype"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostype">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type</a></h2>
+<p>os type</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypearch"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypearch">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.arch</a></h2>
+<p>arch specifying the CPU architecture to virtualization
+If arch is omitted then for most hypervisor drivers, the host native arch will be chosen</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypecontent"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypecontent">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.content</a></h2>
+<p>hvm: full virt
+linux: Xen</p>
+<p><em><em>Type</em></em>:
+one of &quot;hvm&quot;, &quot;linux&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;hvm&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameostypemachine"><a class="header" href="#turbovirtualizationlibvirtdomainsnameostypemachine">turbo.virtualization.libvirt.domains.&lt;name&gt;.os.type.machine</a></h2>
+<p>machine referring to the machine type. The Capabilities XML provides details on allowed values for these. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;pc-i440fx-5.1&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnametitle"><a class="header" href="#turbovirtualizationlibvirtdomainsnametitle">turbo.virtualization.libvirt.domains.&lt;name&gt;.title</a></h2>
+<p>The optional element title provides space for a short description of the domain. The title should not contain any newlines. Since 0.9.10 .</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;A string with no newline&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.type</a></h2>
+<p>The type specifies the hypervisor used for running the domain. The allowed values are driver specific, but include &quot;xen&quot;, &quot;kvm&quot;, &quot;qemu&quot; and &quot;lxc&quot;.</p>
+<p><em><em>Type</em></em>:
+one of &quot;xen&quot;, &quot;kvm&quot;, &quot;qemu&quot;, &quot;lxc&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;kvm&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnameuuid"><a class="header" href="#turbovirtualizationlibvirtdomainsnameuuid">turbo.virtualization.libvirt.domains.&lt;name&gt;.uuid</a></h2>
+<p>Machine UUID</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;509ee912-24b8-11eb-96f4-1b7af47272c3&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpu"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpu">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu</a></h2>
+<p>CPU Allocation</p>
+<p><em><em>Type</em></em>:
+submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpucpuset"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpucpuset">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.cpuset</a></h2>
+<p>The optional attribute cpuset is a comma-separated list of physical CPU numbers that domain process and virtual CPUs can be pinned to by default. </p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;1-4,^3,6&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpucurrent"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpucurrent">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.current</a></h2>
+<p>The optional attribute current can be used to specify whether fewer than the maximum number of virtual CPUs should be enabled. Since 0.8.5</p>
+<p><em><em>Type</em></em>:
+null or unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpuplacement"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpuplacement">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.placement</a></h2>
+<p>The optional attribute placement can be used to indicate the CPU placement mode for domain process. </p>
+<p><em><em>Type</em></em>:
+null or one of &quot;static&quot;, &quot;auto&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamevcpusize"><a class="header" href="#turbovirtualizationlibvirtdomainsnamevcpusize">turbo.virtualization.libvirt.domains.&lt;name&gt;.vcpu.size</a></h2>
+<p>The content of this element defines the maximum number of virtual CPUs allocated for the guest OS, which must be between 1 and the maximum supported by the hypervisor.</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<p><em><em>Default</em></em></p>
+<pre><code>1
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+            </nav>
+
+        </div>
+
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        <script src="clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        <script type="text/javascript">
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+    </body>
+</html>
