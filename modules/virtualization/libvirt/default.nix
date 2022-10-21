@@ -287,7 +287,9 @@ in
     };
 
     turbo.virtualization.libvirt._finalXML = lib.mkOption {
-      description = "final xml content";
+      description = ''
+        final xml content, this is automatically generated from the settings and should't be touch manually.
+      '';
       type = types.attrsOf types.package;
       default = { };
       internal = true;
