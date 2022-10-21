@@ -3,7 +3,8 @@ let
   cfg = config.turbo.networking.routing.rtr;
   superCfg = config.turbo.networking.router;
   types = lib.types;
-in {
+in
+{
   options = {
     turbo.networking.routing.rtr = {
       enable = lib.mkOption {

@@ -10,10 +10,12 @@ let
     default = null;
   };
   genNetworkingIp = ips: prefixLength:
-    map (el: {
-      address = el;
-      prefixLength = prefixLength;
-    }) (filter (el: el != null) ips);
+    map
+      (el: {
+        address = el;
+        prefixLength = prefixLength;
+      })
+      (filter (el: el != null) ips);
 
   types = lib.types;
 in
@@ -154,13 +156,21 @@ in
 
     environment.systemPackages = with pkgs; [
       # Some network utilities
-      tcpdump iperf3 dropwatch mtr traceroute ldns whois ipset ethtool
+      tcpdump
+      iperf3
+      dropwatch
+      mtr
+      traceroute
+      ldns
+      whois
+      ipset
+      ethtool
     ];
 
     # Also set up ngtun :)
     turbo.networking.ngtun = lib.mkIf cfg.ngtun {
       node = {
-        groups = [ "routers" ] 
+        groups = [ "routers" ]
           ++ lib.optional (cfg.region != null) cfg.region
           ++ lib.optional (cfg.core) "routers-core";
       };

@@ -3,7 +3,8 @@ with builtins;
 let
   cfg = config.turbo.networking.rename-interfaces;
   types = lib.types;
-in {
+in
+{
   imports = [
     ./udev.nix
     ./networkd.nix

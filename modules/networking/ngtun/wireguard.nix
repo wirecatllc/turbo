@@ -44,37 +44,39 @@ let
     ];
   };
 
-  renderNetwork = name: tunnel: let
-    llnum = toString tunnel.linkLocalId;
-  in
+  renderNetwork = name: tunnel:
+    let
+      llnum = toString tunnel.linkLocalId;
+    in
     assert (lib.assertMsg config.networking.useNetworkd "systemd-networkd must be enabled for ngtun to work");
-  {
-    inherit name;
-    networkConfig = {
-      LinkLocalAddressing = "no";
+    {
+      inherit name;
+      networkConfig = {
+        LinkLocalAddressing = "no";
+      };
+      addresses = [
+        {
+          addressConfig = {
+            Address = "172.30.0.${toString (tunnel.myId + 1)}/32";
+            Peer = "172.30.0.${toString (tunnel.peerId + 1)}/32";
+          };
+        }
+        {
+          addressConfig = {
+            Address = "fe80::${llnum}/64";
+            Scope = "link";
+          };
+        }
+      ];
     };
-    addresses = [
-      {
-        addressConfig = {
-          Address = "172.30.0.${toString (tunnel.myId + 1)}/32";
-          Peer = "172.30.0.${toString (tunnel.peerId + 1)}/32";
-        };
-      }
-      {
-        addressConfig = {
-          Address = "fe80::${llnum}/64";
-          Scope = "link";
-        };
-      }
-    ];
-  };
 
   renderFirewall = name: tunnel: {
     proto = "udp";
     dport = tunnel.listenPort;
     action = "ACCEPT";
   };
-in {
+in
+{
   config = lib.mkIf cfg.enable {
     #systemd.network.netdevs = lib.mapAttrs renderNetdev cfg.generatedTunnels;
     systemd.network.networks = lib.mapAttrs renderNetwork cfg.generatedTunnels;

@@ -6,7 +6,8 @@ let
 
   renameInterface = mac: ifname:
     "SUBSYSTEM==\"net\", ACTION==\"add\", ATTR{address}==\"${mac}\", NAME=\"${ifname}\"";
-in {
+in
+{
   config = lib.mkIf (cfg.enable && cfg.method == "udev")
     (if (lib.versionAtLeast lib.version "21.03pre") then {
       services.udev.initrdRules = concatStringsSep "\n"

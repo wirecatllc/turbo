@@ -14,16 +14,18 @@ let
     persistentKeepalive = if peer.persistentKeepalive == 0 then null else peer.persistentKeepalive;
   };
 
-  renderInterface = name: tunnel: let
-    peers = map renderPeer tunnel.peers;
-  in {
-    inherit (tunnel) privateKey listenPort;
-    table = "off";
+  renderInterface = name: tunnel:
+    let
+      peers = map renderPeer tunnel.peers;
+    in
+    {
+      inherit (tunnel) privateKey listenPort;
+      table = "off";
 
-    postUp = ''
-      ${pkgs.wireguard-tools}/bin/wg set ${name} fwmark ${toString tunnel.fwMark}
-    '';
-  };
+      postUp = ''
+        ${pkgs.wireguard-tools}/bin/wg set ${name} fwmark ${toString tunnel.fwMark}
+      '';
+    };
 
   renderUnit = name: tunnel: {
     name = "wg-quick-${name}";
@@ -32,7 +34,8 @@ let
     };
   };
 
-in {
+in
+{
   config = lib.mkIf (cfg.backend == "userspace") {
     networking.wg-quick.interfaces = lib.mapAttrs renderInterface cfg.tunnels;
 

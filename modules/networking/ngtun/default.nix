@@ -70,7 +70,7 @@ let
           endpoints at all.
         '';
         type = endpointType;
-        default = {};
+        default = { };
       };
       privateKey = lib.mkOption {
         description = ''
@@ -84,7 +84,7 @@ let
           Groups this node belongs to
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
       supportedFamilies = lib.mkOption {
         description = ''
@@ -93,8 +93,8 @@ let
           Defaults to the families for which an endpoint
           is configured.
         '';
-        type = types.listOf (types.enum ["ipv4" "ipv6"]);
-        default = []
+        type = types.listOf (types.enum [ "ipv4" "ipv6" ]);
+        default = [ ]
           ++ lib.optional (cfg.node.endpoint.ipv4 != null) "ipv4"
           ++ lib.optional (cfg.node.endpoint.ipv6 != null) "ipv6";
       };
@@ -107,7 +107,7 @@ let
           - If the tunnel will be established over an address
             family for which we don't have a static endpoint
         '';
-        type = types.enum ["auto" "yes" "no"];
+        type = types.enum [ "auto" "yes" "no" ];
         default = "auto";
       };
       costs = lib.mkOption {
@@ -119,7 +119,7 @@ let
           global.defaultCost if neither has specified a cost.
         '';
         type = types.attrsOf types.ints.unsigned;
-        default = {};
+        default = { };
         example = {
           node-b = 100;
           node-c = 1;
@@ -131,11 +131,11 @@ let
           List of additional peers to create tunnels to
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
     };
   };
-  
+
   groupType = types.submodule {
     options = {
       hubs = lib.mkOption {
@@ -145,7 +145,7 @@ let
           Useful for regional hub-and-spokes networks.
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
       fullMesh = lib.mkOption {
         description = ''
@@ -203,13 +203,16 @@ let
       };
       myId = lib.mkOption {
         type = types.ints.unsigned;
+        internal = true;
       };
       peerId = lib.mkOption {
         type = types.ints.unsigned;
+        internal = true;
       };
     };
   };
-in {
+in
+{
   imports = [
     ./gentunnels.nix
     ./wireguard.nix
@@ -234,14 +237,14 @@ in {
           Global options
         '';
         type = globalType;
-        default = {};
+        default = { };
       };
       node = lib.mkOption {
         description = ''
           Node options
         '';
         type = nodeType;
-        default = {};
+        default = { };
       };
       groups = lib.mkOption {
         description = ''
@@ -251,7 +254,7 @@ in {
           this in the common configurations.
         '';
         type = types.attrsOf groupType;
-        default = {};
+        default = { };
       };
 
       # Internal options
@@ -264,28 +267,33 @@ in {
           This shouldn't be manually set.
         '';
         type = types.attrsOf tunnelType;
-        default = {};
+        default = { };
+        internal = true;
       };
       defaultGroupConfig = lib.mkOption {
         description = ''
           (Internal option)
         '';
         type = groupType;
-        default = {};
+        default = { };
+        internal = true;
       };
 
       debug = lib.mkOption {
         type = types.unspecified;
+        internal = true;
       };
     };
   };
 
   config = lib.mkIf cfg.enable {
-    boot.extraModulePackages = let
-      kernelPackages = config.boot.kernelPackages;
-    in if lib.versionOlder kernelPackages.kernel.version "5.6" then [
-      kernelPackages.wireguard
-    ] else [];
+    boot.extraModulePackages =
+      let
+        kernelPackages = config.boot.kernelPackages;
+      in
+      if lib.versionOlder kernelPackages.kernel.version "5.6" then [
+        kernelPackages.wireguard
+      ] else [ ];
     environment.systemPackages = [
       pkgs.wireguard-tools
     ];

@@ -66,7 +66,7 @@ let
           Allowed IPs
         '';
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -86,6 +86,7 @@ in
           kernel (systemd-networkd) otherwise.
         '';
         type = types.enum [ "kernel" "userspace" ];
+        defaultText = lib.literalExpression ''if config.boot.isContainer then "userspace" else "kernel"'';
         default = if config.boot.isContainer then "userspace" else "kernel";
       };
       tunnels = lib.mkOption {
@@ -93,7 +94,7 @@ in
           Tunnels
         '';
         type = types.attrsOf tunnelType;
-        default = {};
+        default = { };
       };
     };
   };

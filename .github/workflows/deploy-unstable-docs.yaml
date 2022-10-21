@@ -1,0 +1,40 @@
+
+name: Deploy Unstable Manual
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-unstable:
+    name: Deploy unstable manual
+
+    runs-on: ubuntu-latest
+    if: github.repository == 'wirecatllc/turbo'
+
+    strategy:
+      matrix:
+        nix:
+          - name: 2.10.3
+            url: https://releases.nixos.org/nix/nix-2.10.3/install
+
+    steps:
+      - uses: actions/checkout@v3.0.2
+
+      - uses: cachix/install-nix-action@v17
+        with:
+          install_url: ${{ matrix.nix.url }}
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      # == Manual
+      - name: Build manual
+        run: nix build .#manual -L
+
+      - name: Deploy manual
+        uses: JamesIves/github-pages-deploy-action@v4.3.4
+        with:
+          branch: gh-pages
+          folder: result
+          target-folder: unstable

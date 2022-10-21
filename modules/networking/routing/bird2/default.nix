@@ -25,31 +25,39 @@ let
   });
 
   # static.conf
-  staticConf = pkgs.writeText "static.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList (name: prot: genconfig.staticProtocol (prot // {
-    inherit name config;
-  })) cfg.staticProtocols));
+  staticConf = pkgs.writeText "static.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+    (name: prot: genconfig.staticProtocol (prot // {
+      inherit name config;
+    }))
+    cfg.staticProtocols));
 
   # ospf.conf
-  ospfConf = pkgs.writeText "ospf.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList (name: prot: genconfig.ospfProtocol (prot // {
-    inherit name;
-  })) cfg.ospfProtocols));
+  ospfConf = pkgs.writeText "ospf.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+    (name: prot: genconfig.ospfProtocol (prot // {
+      inherit name;
+    }))
+    cfg.ospfProtocols));
 
   # bgp.conf
-  bgpConf = pkgs.writeText "bgp.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList (name: peer: genconfig.bgpSession (peer // {
-    inherit name config;
-  })) cfg.bgpSessions));
+  bgpConf = pkgs.writeText "bgp.conf" (concatStringsSep "\n" (lib.attrsets.mapAttrsToList
+    (name: peer: genconfig.bgpSession (peer // {
+      inherit name config;
+    }))
+    cfg.bgpSessions));
 
   # == Computed ==
   # A list of interfaces on which we talk OSPF, for firewalling
   ospfAdvInterfaces =
-    lib.lists.unique (lib.lists.flatten (lib.attrsets.mapAttrsToList (_: prot:
-      (lib.attrsets.mapAttrsToList
-        (name: area: attrNames
-          (lib.attrsets.filterAttrs (iname: iopts: !iopts.stub) area.interfaces)
+    lib.lists.unique (lib.lists.flatten (lib.attrsets.mapAttrsToList
+      (_: prot:
+        (lib.attrsets.mapAttrsToList
+          (name: area: attrNames
+            (lib.attrsets.filterAttrs (iname: iopts: !iopts.stub) area.interfaces)
+          )
+          prot.areas
         )
-        prot.areas
       )
-    ) cfg.ospfProtocols))
+      cfg.ospfProtocols))
   ;
 
   # == Options ==
@@ -151,7 +159,7 @@ let
       };
       interfaces = mkOption {
         description = "Interfaces";
-        default = {};
+        default = { };
         type = types.attrsOf ospfInterfaceType;
       };
       extraConfigs = mkOption {
@@ -331,7 +339,7 @@ let
       prefixes = mkOption {
         # DOES NOT WORK YET
         description = "List of prefixes to accept. If empty, don't enable prefix list ACL.";
-        default = [];
+        default = [ ];
         example = [ "1.2.3.0/24" ];
         type = types.listOf types.str;
       };
@@ -404,7 +412,7 @@ let
 
           Ignored for iBGP.
         '';
-        default = [];
+        default = [ ];
         type = types.listOf (types.enum allChannels);
       };
       ibgpExportExternal = mkOption {
@@ -422,7 +430,7 @@ let
       extraChannelConfigs = mkOption {
         description = "Extra configurations for channel";
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
       };
       extraConfigs = mkOption {
         description = "Extra configurations";
@@ -436,7 +444,7 @@ let
         '';
         example = ''[ ["MISC" "MISC_DONT_REWRITE_NEXTHOP"] ]'';
         type = types.listOf (types.listOf types.str);
-        default = [];
+        default = [ ];
       };
     };
   };
@@ -537,17 +545,17 @@ in
       staticProtocols = mkOption {
         description = "Static protocol instances";
         type = types.attrsOf staticProtocolType;
-        default = {};
+        default = { };
       };
       ospfProtocols = mkOption {
         description = "OSPF protocol instances";
         type = types.attrsOf ospfProtocolType;
-        default = {};
+        default = { };
       };
       bgpSessions = mkOption {
         description = "BGP protocol instances";
         type = types.attrsOf bgpSessionType;
-        default = {};
+        default = { };
       };
       extraConfigs = mkOption {
         description = "Extra configurations";
@@ -564,29 +572,36 @@ in
 
     # bird.conf will change whenever bird2-config or nodeConf
     # is updated
-    environment.etc."bird.conf".source = pkgs.runCommandLocal "validated-bird2.conf" {
-      rawConfig = ''
-        include "${nodeConf}";
-        include "${cfg.baseConfig}/bird.conf";
-        include "${staticConf}";
-        include "${ospfConf}";
-        include "${bgpConf}";
+    environment.etc."bird.conf".source = pkgs.runCommandLocal "validated-bird2.conf"
+      {
+        rawConfig = ''
+          include "${nodeConf}";
+          include "${cfg.baseConfig}/bird.conf";
+          include "${staticConf}";
+          include "${ospfConf}";
+          include "${bgpConf}";
 
-        # extraConfigs
-        ${cfg.extraConfigs}
-      '';
-    } ''
+          # extraConfigs
+          ${cfg.extraConfigs}
+        '';
+      } ''
       echo "$rawConfig" > $out
       ${cfg.birdPackage}/bin/bird -pc $out
     '';
 
     turbo.networking.firewall.filterInputRules = [
       {
-        proto = "tcp"; dport = "bgp"; action = "ACCEPT";
+        proto = "tcp";
+        dport = "bgp";
+        action = "ACCEPT";
       }
-    ] ++ (map (i: {
-      proto = 89; interface = i; action = "ACCEPT";
-    }) ospfAdvInterfaces);
+    ] ++ (map
+      (i: {
+        proto = 89;
+        interface = i;
+        action = "ACCEPT";
+      })
+      ospfAdvInterfaces);
 
     systemd.services.bird2 = {
       wantedBy = [ "multi-user.target" ];
@@ -646,19 +661,23 @@ in
         OnUnitActiveSec = "1d";
       };
     };
-    systemd.services.bird2-reload-ebgp = let
-      ebgpSessions = attrNames (lib.filterAttrs (k: v: !v.iBgp) cfg.bgpSessions);
-      reload = let
-        commands = map (n: "${cfg.birdPackage}/bin/birdc reload in ${n}") ebgpSessions;
-      in concatStringsSep "\n" commands;
-    in {
-      script = ''
-        echo "Reloading eBGP sessions..."
-        ${reload}
-      '';
-      serviceConfig = {
-        Type = "oneshot";
+    systemd.services.bird2-reload-ebgp =
+      let
+        ebgpSessions = attrNames (lib.filterAttrs (k: v: !v.iBgp) cfg.bgpSessions);
+        reload =
+          let
+            commands = map (n: "${cfg.birdPackage}/bin/birdc reload in ${n}") ebgpSessions;
+          in
+          concatStringsSep "\n" commands;
+      in
+      {
+        script = ''
+          echo "Reloading eBGP sessions..."
+          ${reload}
+        '';
+        serviceConfig = {
+          Type = "oneshot";
+        };
       };
-    };
   };
 }

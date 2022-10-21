@@ -9,6 +9,15 @@ in
       block = mkOption {
         type = types.attrsOf (types.submodule ./block.nix);
         default = { };
+        example = ''
+          "user1-dataset1" = {
+              source = "tank/user/dataset-1";
+          };
+        '';
+        description = ''
+          This section is used to manage Client's block storage on Hosting machine.
+          Block stated here will be mounted with recommended block storage strategy and policy applied.
+        '';
       };
     };
   };

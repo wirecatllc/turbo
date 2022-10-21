@@ -281,12 +281,16 @@ in
     turbo.virtualization.libvirt.domains = mkOption {
       type = types.attrsOf (types.submodule ./domain.nix);
       default = { };
+      description = ''
+        Set of Domains(Machines) defined on Host
+      '';
     };
 
     turbo.virtualization.libvirt._finalXML = lib.mkOption {
       description = "final xml content";
       type = types.attrsOf types.package;
       default = { };
+      internal = true;
     };
   };
 

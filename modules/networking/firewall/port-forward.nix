@@ -45,6 +45,9 @@ in
     portForward = mkOption {
       type = types.listOf portForwardType;
       default = [ ];
+      description = ''
+      A list of port-forward rules to render
+      '';
     };
   };
 

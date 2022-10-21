@@ -5,13 +5,14 @@ let
     options = {
       path = mkOption {
         type = types.nullOr types.path;
-        description = "path";
         default = null;
         example = "/dev/pts/4";
+        description = ''
+          Device Path
+        '';
       };
     };
   };
-
 
   target = types.submodule {
     options = {
@@ -34,6 +35,9 @@ let
         type = types.nullOr types.str;
         default = null;
         example = "0";
+        description = ''
+          N/A
+        '';
       };
     };
   };
@@ -44,19 +48,26 @@ in
       type = types.nullOr (types.enum [
         "pty"
       ]);
-      description = "input type";
+      description = ''
+        input type
+      '';
       default = "pty";
     };
 
     source = mkOption {
       type = types.nullOr source;
-      description = "sub source resource";
+      description = ''
+        sub source resource
+      '';
       default = null;
     };
 
     target = mkOption {
       type = types.nullOr target;
       default = null;
+      description = ''
+        N/A
+      '';
     };
   };
 }
