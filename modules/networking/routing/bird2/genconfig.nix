@@ -144,7 +144,7 @@ in rec {
     compExportFilter = renderFilter ''
       common_export_filter(${toString compRealPeerAS}, ${toString localAS}, ${renderParams relationship network extraParams});
     '' exportFilter;
-    compLocalPref = if localPref != null then "default bgp_local_pref ${localPref};" else (
+    compLocalPref = if localPref != null then "default bgp_local_pref ${toString localPref};" else (
       if relationship == "ixp" then "default bgp_local_pref 300;"
       else if relationship == "upstream" then "default bgp_local_pref 200;"
       else ""
