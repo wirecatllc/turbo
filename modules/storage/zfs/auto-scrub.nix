@@ -12,7 +12,7 @@ in
         default = hasZFS;
         defaultText = lib.literalExpression ''any (d: d.fsType == "zfs") (attrValues config.fileSystems);'';
         description = ''
-         whether to enable ZFS auto scrub for given storage. This is suggested to keep data integraty
+          whether to enable ZFS auto scrub for given storage. This is suggested to keep data integraty
         '';
       };
     };
