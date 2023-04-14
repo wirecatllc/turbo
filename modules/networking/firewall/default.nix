@@ -179,7 +179,10 @@ in
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.enable = false;
+    networking.firewall = {
+      enable = false;
+      package = pkgs.iptables-legacy;
+    };
     services.ferm.enable = true;
 
     # Simple TCP rules
@@ -187,7 +190,7 @@ in
     turbo.networking.firewall.ip6.filter.chains.input.rules = cfg.filterInputRules;
 
     environment.systemPackages = with pkgs; [
-      iptables
+      iptables-legacy
     ];
 
     services.ferm.config = ''
