@@ -1041,6 +1041,65 @@ unsigned integer, meaning &gt;=0</p>
 <p><em><em>Default</em></em></p>
 <pre><code>1
 </code></pre>
+<h2 id="turbovirtualizationservicesnovncbasedomain"><a class="header" href="#turbovirtualizationservicesnovncbasedomain">turbo.virtualization.services.novnc.baseDomain</a></h2>
+<p>Basic domain for noVNC</p>
+<p>For example, with baseDomain set to &quot;gaia.indexyz.me&quot;, VNC
+console for a machine will be accessible via
+[machine name].gaia.indexyz.me.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;gaia.indexyz.me&quot;
+</code></pre>
+<h2 id="turbovirtualizationservicesnovncenable"><a class="header" href="#turbovirtualizationservicesnovncenable">turbo.virtualization.services.novnc.enable</a></h2>
+<p>Enable noVNC page</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="turbovirtualizationservicesnovncinternalport"><a class="header" href="#turbovirtualizationservicesnovncinternalport">turbo.virtualization.services.novnc.internalPort</a></h2>
+<p>Port to listen for noVNC WebSocket</p>
+<p><em><em>Type</em></em>:
+unsigned integer, meaning &gt;=0</p>
+<h2 id="turbovirtualizationservicesnovncmachines"><a class="header" href="#turbovirtualizationservicesnovncmachines">turbo.virtualization.services.novnc.machines</a></h2>
+<p>Machines</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationservicesnovncmachinesnamebackend"><a class="header" href="#turbovirtualizationservicesnovncmachinesnamebackend">turbo.virtualization.services.novnc.machines.&lt;name&gt;.backend</a></h2>
+<p>Backend</p>
+<p><em><em>Type</em></em>:
+value &quot;basicauth&quot; (singular enum)</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;basicauth&quot;
+</code></pre>
+<h2 id="turbovirtualizationservicesnovncmachinesnamepassword"><a class="header" href="#turbovirtualizationservicesnovncmachinesnamepassword">turbo.virtualization.services.novnc.machines.&lt;name&gt;.password</a></h2>
+<p>Basic Auth Password</p>
+<p>Only used when mode is set to &quot;basicauth&quot;.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbovirtualizationservicesnovncmachinesnameusername"><a class="header" href="#turbovirtualizationservicesnovncmachinesnameusername">turbo.virtualization.services.novnc.machines.&lt;name&gt;.username</a></h2>
+<p>Basic Auth Username</p>
+<p>Only used when mode is set to &quot;basicauth&quot;.</p>
+<p><em><em>Type</em></em>:
+string</p>
+<h2 id="turbovirtualizationservicesnovncnovncpackage"><a class="header" href="#turbovirtualizationservicesnovncnovncpackage">turbo.virtualization.services.novnc.novncPackage</a></h2>
+<p>noVNC package to use</p>
+<p><em><em>Type</em></em>:
+package</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;derivation&quot;,&quot;name&quot;:&quot;novnc-1.3.0&quot;}
+</code></pre>
+<h2 id="turbovirtualizationservicesnovncwebsockifypackage"><a class="header" href="#turbovirtualizationservicesnovncwebsockifypackage">turbo.virtualization.services.novnc.websockifyPackage</a></h2>
+<p>Websockify package to use</p>
+<p><em><em>Type</em></em>:
+package</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{&quot;_type&quot;:&quot;derivation&quot;,&quot;name&quot;:&quot;python3.10-websockify-0.10.0&quot;}
+</code></pre>
 
                     </main>
 
