@@ -54,7 +54,6 @@ let
 
       address = mkOption {
         type = address;
-        default = { };
       };
     };
   };
@@ -89,7 +88,6 @@ in
 
     source = mkOption {
       type = source;
-      default = { };
     };
 
     rom = mkOption {
