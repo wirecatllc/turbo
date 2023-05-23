@@ -2822,7 +2822,28 @@ null or path</p>
 <h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnamelistentype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.listen.type</a></h2>
 <p>type</p>
 <p><em><em>Type</em></em>:
-one of &quot;address&quot;, &quot;socket&quot;</p>
+one of &quot;address&quot;, &quot;socket&quot;, &quot;none&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopengl"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopengl">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.opengl</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopenglenable"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopenglenable">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.opengl.enable</a></h2>
+<p>enable opengl</p>
+<p><em><em>Type</em></em>:
+one of &quot;yes&quot;, &quot;no&quot;</p>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopenglrendernode"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnameopenglrendernode">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.opengl.rendernode</a></h2>
+<p>Which driver to use, leave null to be in auto mode</p>
+<p><em><em>Type</em></em>:
+null or path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;/dev/dri/by-path/pci-0000:50:00.0-render&quot;
+</code></pre>
 <h2 id="turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesgraphicsnametype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.graphics.&lt;name&gt;.type</a></h2>
 <p>type</p>
 <p><em><em>Type</em></em>:
@@ -3109,6 +3130,37 @@ null or one of &quot;system-serial&quot;, &quot;isa-serial&quot;</p>
 null or value &quot;pty&quot; (singular enum)</p>
 <p><em><em>Default</em></em></p>
 <pre><code>&quot;pty&quot;
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesvideo"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesvideo">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.video</a></h2>
+<p>video</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesvideonamemodel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesvideonamemodel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.video.&lt;name&gt;.model</a></h2>
+<p>This option has no description.</p>
+<p><em><em>Type</em></em>:
+null or submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesvideonamemodel3daccel"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesvideonamemodel3daccel">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.video.&lt;name&gt;.model.3daccel</a></h2>
+<p>enable 3d acceleration, only available for virtio</p>
+<p><em><em>Type</em></em>:
+null or boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>true
+</code></pre>
+<h2 id="turbovirtualizationlibvirtdomainsnamedevicesvideonamemodeltype"><a class="header" href="#turbovirtualizationlibvirtdomainsnamedevicesvideonamemodeltype">turbo.virtualization.libvirt.domains.&lt;name&gt;.devices.video.&lt;name&gt;.model.type</a></h2>
+<p>type</p>
+<p><em><em>Type</em></em>:
+one of &quot;virtio&quot;, &quot;vga&quot;, &quot;ramfb&quot;, &quot;qxl&quot;, &quot;none&quot;, &quot;bochs&quot;</p>
+<p><em><em>Default</em></em></p>
+<pre><code>&quot;virtio&quot;
 </code></pre>
 <h2 id="turbovirtualizationlibvirtdomainsnameextraconfig"><a class="header" href="#turbovirtualizationlibvirtdomainsnameextraconfig">turbo.virtualization.libvirt.domains.&lt;name&gt;.extraConfig</a></h2>
 <p>extra xml to add in domain</p>
