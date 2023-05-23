@@ -139,6 +139,9 @@ let
         <listen type='${g.listen.type}' 
                 ${shouldWrite g.listen.socket "socket='${g.listen.socket}'"}
         />
+        ${shouldWrite g.opengl ''
+          <gl ${shouldWrite g.opengl.enable "enable='${g.opengl.enable}'"} ${shouldWrite g.opengl.rendernode "rendernode='${g.opengl.rendernode}'"}/>
+        ''}
        ''}
     </graphics>
   '';
@@ -214,6 +217,18 @@ let
     </console>
   '';
 
+  buildDeviceVideo = d: ''
+    <video>
+      ${shouldWrite d.model ''
+        <model ${shouldWrite d.model.type ''type="${d.model.type}"''}>
+          ${shouldWrite d.model."3daccel" ''
+            <acceleration accel3d="yes"/>
+          ''}
+        </model>
+      ''}
+    </video>
+  '';
+
   buildDevices = d: ''
     <devices>
       ${builtins.concatStringsSep "\n" (map buildDeviceInput (lib.attrsets.mapAttrsToList (n: v: v) d.input))}
@@ -224,6 +239,7 @@ let
       ${builtins.concatStringsSep "\n" (map buildHostDev (lib.attrsets.mapAttrsToList (n: v: v) d.hostdev))}
       ${builtins.concatStringsSep "\n" (map buildDeviceConsole (lib.attrsets.mapAttrsToList (n: v: v) d.console))}
       ${builtins.concatStringsSep "\n" (map buildDeviceSerial (lib.attrsets.mapAttrsToList (n: v: v) d.serial))} 
+      ${builtins.concatStringsSep "\n" (map buildDeviceVideo (lib.attrsets.mapAttrsToList (n: v: v) d.video))} 
       ${d.extraConfig}
     </devices>
   '';

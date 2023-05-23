@@ -10,6 +10,7 @@ let
     hostdev = ./hostdev.nix;
     console = ./console.nix;
     serial = ./serial.nix;
+    video = ./video.nix;
   };
 
   modules = attrsets.mapAttrs
