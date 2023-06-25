@@ -7,6 +7,17 @@ let
     <memory unit="${memory.unit}">${toString memory.size}</memory>
   '';
 
+  buildCPU = v: if v.customConfig != null then v.customConfig else 
+    if v.cpuMode == "qemu64" then ''
+      <cpu mode="custom" match="exact" check="none">
+        <model fallback="allow">qemu64</model>
+      </cpu>
+    '' else if v.cpuMode == "host-passthrough" then ''
+      <cpu mode="host-passthrough" check="none" migratable="on"/>
+    '' else if v.cpuMode == "host-model" then ''
+      <cpu mode="host-model" check="partial"/>
+    '' else throw "unsupported cpuMode: ${v.cpuMode}";
+
   buildvCPU = v: ''
     <vcpu 
       ${shouldWrite v.current ''current="${toString v.current}"''}
@@ -256,6 +267,7 @@ let
   domainXmlDefinition = name: domain:
     let
       memory = domain.memory;
+      cpu = domain.cpu;
       vcpu = domain.vcpu;
       cputune = domain.cputune;
       os = domain.os;
@@ -269,6 +281,7 @@ let
         <uuid>${domain.uuid}</uuid>
         ${if memoryBacking != null then buildMemoryBacking memoryBacking else ""}
         ${buildMemory memory}
+        ${buildCPU cpu}
         ${buildvCPU vcpu}
         ${buildFeatures features}
         ${if cputune != null then buildCPUTune cputune else ""}

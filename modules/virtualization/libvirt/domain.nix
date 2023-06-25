@@ -3,6 +3,7 @@ with lib;
 let
   supportedModules = {
     vcpu = ./cpu/vcpu.nix;
+    cpu = ./cpu/cpu.nix;
     cputune = ./cpu/cputune.nix;
     os = ./os.nix;
     features = ./features.nix;
@@ -37,6 +38,14 @@ in
         The type specifies the hypervisor used for running the domain. The allowed values are driver specific, but include "xen", "kvm", "qemu" and "lxc".
       '';
       default = "kvm";
+    };
+
+    cpu = mkOption {
+      type = modules.cpu;
+      description = ''
+        CPU Model
+      '';
+      default = { };
     };
 
     vcpu = mkOption {
