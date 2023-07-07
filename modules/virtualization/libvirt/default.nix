@@ -160,15 +160,23 @@ let
   buildHostDev = h: ''
     <hostdev mode='${h.mode}' type='${h.type}' managed='${h.managed}'>
       <source ${shouldWrite h.source.writeFiltering ''writeFiltering='${h.source.writeFiltering}' ''}>
-        <address domain='${h.source.address.domain}'
-                bus='${h.source.address.bus}'
-                slot='${h.source.address.slot}'
-                function='${h.source.address.function}'
-        />
+        ${shouldWrite h.source.address ''
+          <address domain='${h.source.address.domain}'
+                  bus='${h.source.address.bus}'
+                  slot='${h.source.address.slot}'
+                  function='${h.source.address.function}'
+          />
+        ''}
+        ${shouldWrite h.source.vendor ''
+          <vendor id="${h.source.vendor.id}" />
+        ''}
+        ${shouldWrite h.source.product ''
+          <product id="${h.source.product.id}" />
+        ''}
+      </source>
       ${shouldWrite h.rom ''
         <rom bar='${h.rom.bar}' file='${h.rom.file}'/>
       ''}
-      </source>
     </hostdev>
   '';
 

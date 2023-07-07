@@ -45,6 +45,15 @@ let
     };
   };
 
+  id = types.submodule {
+    options = {
+      id = mkOption {
+        type = types.str;
+        example = "0x3553";
+      };
+    };
+  };
+
   source = types.submodule {
     options = {
       writeFiltering = mkOption {
@@ -52,8 +61,19 @@ let
         default = null;
       };
 
+      vendor = mkOption {
+        type = types.nullOr id;
+        default = null;
+      };
+
+      product = mkOption {
+        type = types.nullOr id;
+        default = null;
+      };
+
       address = mkOption {
-        type = address;
+        type = types.nullOr address;
+        default = null;
       };
     };
   };
@@ -63,6 +83,7 @@ in
     type = mkOption {
       type = types.enum [
         "pci"
+        "usb"
       ];
       description = "type";
       default = "pci";
