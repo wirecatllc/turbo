@@ -28,7 +28,7 @@ in
               deny all;
             '';
 
-            root = cfg.novncPackage;
+            root = "${cfg.novncPackage}/share/webapps/novnc/";
             basicAuth.${machine.username} = machine.password;
             locations."/websockify" = {
               proxyWebsockets = true;
