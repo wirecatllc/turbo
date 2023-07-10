@@ -2,5 +2,7 @@
   imports = [
     ./libvirt
     ./novnc
+
+    ./usbredir
   ];
 }
