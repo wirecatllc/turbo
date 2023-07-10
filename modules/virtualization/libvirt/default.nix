@@ -180,6 +180,14 @@ let
     </hostdev>
   '';
 
+  buildRedirDev = h: ''
+    <redirdev bus='${h.bus}' type='${h.type}'>
+      ${shouldWrite h.source ''
+      <source mode='${h.source.mode}' host='${h.source.host}' service='${h.source.service}'/>
+      ''}
+    </redirdev>
+  '';
+
   buildDeviceInterface = f: ''
     <interface type="${f.type}" 
               ${shouldWrite f.managed ''
@@ -248,17 +256,22 @@ let
     </video>
   '';
 
-  buildDevices = d: ''
+  buildDevices = d: 
+    let
+      renderDevice = buildDef: dev: builtins.concatStringsSep "\n" (map buildDef (lib.attrsets.mapAttrsToList (n: v: v) dev));
+    in 
+  ''
     <devices>
-      ${builtins.concatStringsSep "\n" (map buildDeviceInput (lib.attrsets.mapAttrsToList (n: v: v) d.input))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceGraphics (lib.attrsets.mapAttrsToList (n: v: v) d.graphics))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceDisk (lib.attrsets.mapAttrsToList (n: v: v) d.disk))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceFileSystem (lib.attrsets.mapAttrsToList (n: v: v) d.filesystem))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceInterface (lib.attrsets.mapAttrsToList (n: v: v) d.interface))}
-      ${builtins.concatStringsSep "\n" (map buildHostDev (lib.attrsets.mapAttrsToList (n: v: v) d.hostdev))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceConsole (lib.attrsets.mapAttrsToList (n: v: v) d.console))}
-      ${builtins.concatStringsSep "\n" (map buildDeviceSerial (lib.attrsets.mapAttrsToList (n: v: v) d.serial))} 
-      ${builtins.concatStringsSep "\n" (map buildDeviceVideo (lib.attrsets.mapAttrsToList (n: v: v) d.video))} 
+      ${renderDevice buildDeviceInput d.input}
+      ${renderDevice buildDeviceGraphics d.graphics}
+      ${renderDevice buildDeviceDisk d.disk}
+      ${renderDevice buildDeviceFileSystem d.filesystem}
+      ${renderDevice buildDeviceInterface d.interface}
+      ${renderDevice buildHostDev d.hostdev}
+      ${renderDevice buildDeviceConsole d.console}
+      ${renderDevice buildDeviceSerial d.serial} 
+      ${renderDevice buildDeviceVideo d.video} 
+      ${renderDevice buildRedirDev d.redirdev}
       ${d.extraConfig}
     </devices>
   '';

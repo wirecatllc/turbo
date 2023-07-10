@@ -11,6 +11,7 @@ let
     console = ./console.nix;
     serial = ./serial.nix;
     video = ./video.nix;
+    redirdev = ./redirdev.nix;
   };
 
   modules = attrsets.mapAttrs
