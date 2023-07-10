@@ -36,13 +36,14 @@ in
     };
 
     config = {
-        systemd.service = builtins.listToAttrs (mapAttrsToList (
+        systemd.services = builtins.listToAttrs (mapAttrsToList (
             name: val:
             let 
             in {
                 name = "usbredir-${name}";
                 value = {
                     restartIfChanged = true;
+                    wantedBy = [ "multi-user.target" ];
                     unitConfig = {
                         StartLimitIntervalSec = 0;
                     };

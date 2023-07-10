@@ -183,7 +183,7 @@ let
   buildRedirDev = h: ''
     <redirdev bus='${h.bus}' type='${h.type}'>
       ${shouldWrite h.source ''
-      <source mode='${h.source.mode}' host='${h.source.host}' service='${h.source.service}'/>
+      <source mode='${h.source.mode}' host='${h.source.host}' service='${toString h.source.service}'/>
       ''}
     </redirdev>
   '';
