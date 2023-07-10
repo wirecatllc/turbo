@@ -7,16 +7,16 @@ let
     <memory unit="${memory.unit}">${toString memory.size}</memory>
   '';
 
-  buildCPU = v: if v.customConfig != null then v.customConfig else 
-    if v.cpuMode == "qemu64" then ''
-      <cpu mode="custom" match="exact" check="none">
-        <model fallback="allow">qemu64</model>
-      </cpu>
-    '' else if v.cpuMode == "host-passthrough" then ''
-      <cpu mode="host-passthrough" check="none" migratable="on"/>
-    '' else if v.cpuMode == "host-model" then ''
-      <cpu mode="host-model" check="partial"/>
-    '' else throw "unsupported cpuMode: ${v.cpuMode}";
+  buildCPU = v: if v.customConfig != null then v.customConfig else
+  if v.cpuMode == "qemu64" then ''
+    <cpu mode="custom" match="exact" check="none">
+      <model fallback="allow">qemu64</model>
+    </cpu>
+  '' else if v.cpuMode == "host-passthrough" then ''
+    <cpu mode="host-passthrough" check="none" migratable="on"/>
+  '' else if v.cpuMode == "host-model" then ''
+    <cpu mode="host-model" check="partial"/>
+  '' else throw "unsupported cpuMode: ${v.cpuMode}";
 
   buildvCPU = v: ''
     <vcpu 
@@ -256,25 +256,25 @@ let
     </video>
   '';
 
-  buildDevices = d: 
+  buildDevices = d:
     let
       renderDevice = buildDef: dev: builtins.concatStringsSep "\n" (map buildDef (lib.attrsets.mapAttrsToList (n: v: v) dev));
-    in 
-  ''
-    <devices>
-      ${renderDevice buildDeviceInput d.input}
-      ${renderDevice buildDeviceGraphics d.graphics}
-      ${renderDevice buildDeviceDisk d.disk}
-      ${renderDevice buildDeviceFileSystem d.filesystem}
-      ${renderDevice buildDeviceInterface d.interface}
-      ${renderDevice buildHostDev d.hostdev}
-      ${renderDevice buildDeviceConsole d.console}
-      ${renderDevice buildDeviceSerial d.serial} 
-      ${renderDevice buildDeviceVideo d.video} 
-      ${renderDevice buildRedirDev d.redirdev}
-      ${d.extraConfig}
-    </devices>
-  '';
+    in
+    ''
+      <devices>
+        ${renderDevice buildDeviceInput d.input}
+        ${renderDevice buildDeviceGraphics d.graphics}
+        ${renderDevice buildDeviceDisk d.disk}
+        ${renderDevice buildDeviceFileSystem d.filesystem}
+        ${renderDevice buildDeviceInterface d.interface}
+        ${renderDevice buildHostDev d.hostdev}
+        ${renderDevice buildDeviceConsole d.console}
+        ${renderDevice buildDeviceSerial d.serial} 
+        ${renderDevice buildDeviceVideo d.video} 
+        ${renderDevice buildRedirDev d.redirdev}
+        ${d.extraConfig}
+      </devices>
+    '';
 
   buildMemoryBacking = md: ''
     <memoryBacking>
