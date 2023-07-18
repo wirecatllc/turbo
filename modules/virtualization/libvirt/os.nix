@@ -43,7 +43,7 @@ let
           machine referring to the machine type. The Capabilities XML provides details on allowed values for these. 
         '';
         default = null;
-        example = "pc-i440fx-5.1";
+        example = "pc-i440fx-5.1, q35";
       };
 
       content = mkOption {

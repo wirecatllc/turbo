@@ -83,8 +83,9 @@ in
 
     services.udev.extraRules = (
       concatStringsSep "\n" (
-        mapAttrsToList (name: val: 
-        if val.reloadWithUdev then ''ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${val.device.vendorId}", ATTR{idProduct}=="${val.device.productId}", TAG+="systemd", RUN+="${pkgs.systemd}/bin/systemctl restart usbredir-${name} --no-block"'' else "")
+        mapAttrsToList
+          (name: val:
+            if val.reloadWithUdev then ''ACTION=="add", SUBSYSTEM=="usb", ATTR{idVendor}=="${val.device.vendorId}", ATTR{idProduct}=="${val.device.productId}", TAG+="systemd", RUN+="${pkgs.systemd}/bin/systemctl restart usbredir-${name} --no-block"'' else "")
           cfg
       )
     );

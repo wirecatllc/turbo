@@ -30,11 +30,9 @@ let
     <os ${shouldWrite os.firmware ''firmware="${os.firmware}"''}>
       ${shouldWrite os.loader ''
         <loader 
-          ${shouldWrite os.loader.readonly ''readonly=${os.loader.readonly}''}
-          ${shouldWrite os.loader.type ''readonly=${os.loader.type}''}
-          ${shouldWrite os.loader.secure ''secure=${os.loader.secure}''}>
-          ${os.loader.path}
-        </loader>
+          ${shouldWrite os.loader.readonly ''readonly="${os.loader.readonly}"''}
+          ${shouldWrite os.loader.type ''type="${os.loader.type}"''}
+          ${shouldWrite os.loader.secure ''secure="${os.loader.secure}"''}>${os.loader.path}</loader>
       ''}
       <type
         ${shouldWrite os.type.machine ''machine="${os.type.machine}"''}
