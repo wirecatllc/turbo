@@ -6,9 +6,7 @@ let
     inherit description;
     default = null;
     type = types.nullOr (
-      types.either
-        (types.either types.str types.ints.unsigned)
-        (types.listOf (types.either types.str types.ints.unsigned))
+      types.enum ["tcp" "udp"]
     );
   };
   # Note: only one port is allowed in each forward
@@ -56,11 +54,17 @@ in
     # It forwards all traffic from interface and port to specified ip and port
     extraConfigs = mkIf (cfg.portForward != [ ]) [
       (
+        # UDP port forward: do not rewrite source IP, so client could send back response to correct IP
         ''
           @def &FORWARD_PORT($proto, $srcIf, $srcPort, $dstIp, $dstPort) = {
               table filter chain FORWARD interface $srcIf daddr $dstIp proto $proto dport $dstPort ACCEPT;
               table nat chain PREROUTING interface $srcIf proto $proto dport $srcPort DNAT to "$dstIp:$dstPort";
               table nat chain POSTROUTING proto $proto daddr $dstIp dport $dstPort MASQUERADE; 
+          }
+
+          @def &FORWARD_PORT_UDP($proto, $srcIf, $srcPort, $dstIp, $dstPort) = {
+              table filter chain FORWARD interface $srcIf daddr $dstIp proto $proto dport $dstPort ACCEPT;
+              table nat chain PREROUTING interface $srcIf proto $proto dport $srcPort DNAT to "$dstIp:$dstPort";
           }
         '' + (
           let
@@ -71,7 +75,7 @@ in
               else toString arg;
 
             strJoin = str: l: (foldl (a: b: a + str + b) "" l);
-            genPortForward = pf: "&FORWARD_PORT(${argument pf.protocol}, ${pf.interface}, ${toString pf.srcPort}, ${pf.dstIp}, ${toString pf.dstPort});";
+            genPortForward = pf: "&FORWARD_PORT${if pf.protocol == "udp" then "_UDP" else ""}(${argument pf.protocol}, ${pf.interface}, ${toString pf.srcPort}, ${pf.dstIp}, ${toString pf.dstPort});";
             forwards = map genPortForward cfg.portForward;
           in
           strJoin "\n" forwards
