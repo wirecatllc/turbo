@@ -5,12 +5,12 @@ let
     options = {
       posix = mkOption {
         type = types.enum [ "on" "off" ];
-        default = "on";
+        default = "off";
       };
 
       flock = mkOption {
         type = types.enum [ "on" "off" ];
-        default = "on";
+        default = "off";
       };
     };
   };
