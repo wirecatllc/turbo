@@ -276,10 +276,27 @@ let
 
   buildMemoryBacking = md: ''
     <memoryBacking>
+    ${shouldWrite md.hugepages ''
+      <hugepages>
+        ${md.hugepages}
+      </hugepages>
+    ''}
+    ${shouldWrite md.nosharepages ''
+      <nosharepages/>
+    ''}
+    ${shouldWrite md.locked ''
+      <locked/>
+    ''}
     ${shouldWrite md.sourceType ''
       <source type='${md.sourceType}'/>
     ''}
       <access mode='${md.accessMode}'/>
+    ${shouldWrite md.allocation ''
+      <allocation mode=${md.allocation.mode} ${shouldWrite md.allocation.threads ''threads=${md.allocation.threads}''}
+    ''}
+     ${shouldWrite md.discard ''
+      <discard/>
+    ''}
     </memoryBacking>
   '';
 

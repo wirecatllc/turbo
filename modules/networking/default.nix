@@ -5,7 +5,7 @@
     ./rename-interfaces
     ./routing
     ./wireguard
-    ./dhcp
+    # DHCP should directly use NixOS module --- kea
 
     ./isp-split-tunnel
   ];
