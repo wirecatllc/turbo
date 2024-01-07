@@ -24,7 +24,7 @@ in
     ./bird2
     ./rtr
     ./jool
-    ./dhcp
+    # DHCP should directly use NixOS module --- kea
   ];
 
   options = {
