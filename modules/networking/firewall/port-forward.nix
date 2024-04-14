@@ -6,7 +6,7 @@ let
     inherit description;
     default = null;
     type = types.nullOr (
-      types.enum ["tcp" "udp"]
+      types.enum [ "tcp" "udp" ]
     );
   };
   # Note: only one port is allowed in each forward

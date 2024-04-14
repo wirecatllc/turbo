@@ -4,7 +4,7 @@ let
   allocationModule = {
     options = {
       mode = mkOption {
-        type = types.nullOr (types.enum ["immediate" "ondemand"]);
+        type = types.nullOr (types.enum [ "immediate" "ondemand" ]);
         default = null;
       };
       threads = mkOption {
