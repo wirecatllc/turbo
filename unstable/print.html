@@ -2102,6 +2102,63 @@ string</p>
 <p>Our private key</p>
 <p><em><em>Type</em></em>:
 string</p>
+<h2 id="wirecatservicesargo-tunnelenable"><a class="header" href="#wirecatservicesargo-tunnelenable">wirecat.services.argo-tunnel.enable</a></h2>
+<p>Enable Argo Tunnel Endpoint</p>
+<p><em><em>Type</em></em>:
+boolean</p>
+<p><em><em>Default</em></em></p>
+<pre><code>false
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnels"><a class="header" href="#wirecatservicesargo-tunneltunnels">wirecat.services.argo-tunnel.tunnels</a></h2>
+<p>Tunnels to create</p>
+<p>to generate token: cloudflared tunnel create my-secret-app</p>
+<p><em><em>Type</em></em>:
+attribute set of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>{}
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;my-secret-app = {\n  credentialsFile = \&quot;/persist/secrets/cf-vnc-tunnel.json\&quot;;\n  tunnelId = \&quot;abcdefgh-abcd-abcd-abcd-abcdabcdabcd\&quot;;\n  ingress = [\n    {\n      service = \&quot;http://[::1]\&quot;;\n    }\n  ];\n};\n&quot;
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnelsnamecredentialsfile"><a class="header" href="#wirecatservicesargo-tunneltunnelsnamecredentialsfile">wirecat.services.argo-tunnel.tunnels.&lt;name&gt;.credentialsFile</a></h2>
+<p>Credential JSON file for tunnel</p>
+<p><em><em>Type</em></em>:
+path</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnelsnameingress"><a class="header" href="#wirecatservicesargo-tunneltunnelsnameingress">wirecat.services.argo-tunnel.tunnels.&lt;name&gt;.ingress</a></h2>
+<p>Ingress to create</p>
+<p><em><em>Type</em></em>:
+list of submodule</p>
+<p><em><em>Default</em></em></p>
+<pre><code>[]
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnelsnameingresshostname"><a class="header" href="#wirecatservicesargo-tunneltunnelsnameingresshostname">wirecat.services.argo-tunnel.tunnels.&lt;name&gt;.ingress.*.hostname</a></h2>
+<p>match rules for host</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;gitlab.widgetcorp.tech\n&quot;
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnelsnameingressservice"><a class="header" href="#wirecatservicesargo-tunneltunnelsnameingressservice">wirecat.services.argo-tunnel.tunnels.&lt;name&gt;.ingress.*.service</a></h2>
+<p>target URL
+https://developers.cloudflare.com/cloudflare-one/applications/non-http</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Example</em></em></p>
+<pre><code>&quot;http://localhost:80\n&quot;
+</code></pre>
+<h2 id="wirecatservicesargo-tunneltunnelsnametunnelid"><a class="header" href="#wirecatservicesargo-tunneltunnelsnametunnelid">wirecat.services.argo-tunnel.tunnels.&lt;name&gt;.tunnelId</a></h2>
+<p>Tunnel UUID</p>
+<p><em><em>Type</em></em>:
+string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="storage-options"><a class="header" href="#storage-options">Storage Options</a></h1>
 <!--
     The following is injected by the build system
