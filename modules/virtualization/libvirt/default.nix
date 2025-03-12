@@ -32,7 +32,8 @@ let
         <loader 
           ${shouldWrite os.loader.readonly ''readonly="${os.loader.readonly}"''}
           ${shouldWrite os.loader.type ''type="${os.loader.type}"''}
-          ${shouldWrite os.loader.secure ''secure="${os.loader.secure}"''}>${os.loader.path}</loader>
+          ${shouldWrite os.loader.secure ''secure="${os.loader.secure}"''}
+          ${shouldWrite os.loader.stateless ''stateless="${os.loader.stateless}"''}>${os.loader.path}</loader>
       ''}
       <type
         ${shouldWrite os.type.machine ''machine="${os.type.machine}"''}

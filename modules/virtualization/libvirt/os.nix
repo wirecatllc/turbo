@@ -23,6 +23,13 @@ let
         type = types.path;
         description = "BIOS Path";
       };
+
+      stateless = mkOption {
+        type = types.nullOr (types.enum [ "yes" "no" ]);
+        description = ''
+          In some cases, however, it may be desirable for the loader to run without any NVRAM, discarding any config changes on shutdown. The stateless flag (Since 8.6.0) can be used to control this behaviour, when set to yes NVRAM will never be created.
+        '';
+      };
     };
   };
 
