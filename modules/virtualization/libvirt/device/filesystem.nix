@@ -1,20 +1,6 @@
 { lib, ... }:
 with lib;
 let
-  lock = types.submodule {
-    options = {
-      posix = mkOption {
-        type = types.enum [ "on" "off" ];
-        default = "off";
-      };
-
-      flock = mkOption {
-        type = types.enum [ "on" "off" ];
-        default = "off";
-      };
-    };
-  };
-
   binary = types.submodule {
     options = {
       path = mkOption {
@@ -29,11 +15,6 @@ let
       cacheMode = mkOption {
         type = types.enum [ "none" "always" ];
         default = "always";
-      };
-
-      lock = mkOption {
-        type = lock;
-        default = { };
       };
     };
   };

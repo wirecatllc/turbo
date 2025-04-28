@@ -108,9 +108,6 @@ let
       ${shouldWrite d.binary ''
       <binary path='${d.binary.path}' xattr='${d.binary.xattr}'>
         <cache mode='${d.binary.cacheMode}'/>
-        ${shouldWrite d.binary.lock ''
-          <lock posix='${d.binary.lock.posix}' flock='${d.binary.lock.flock}'/>
-        ''}
       </binary>
       ''}
       ${shouldWrite d.source ''
