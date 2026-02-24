@@ -92,6 +92,11 @@ let
           append = "";
         };
       };
+      preference = mkOption {
+        description = "Route preference (priority). null uses BIRD default.";
+        type = types.nullOr types.ints.unsigned;
+        default = null;
+      };
       extraChannelConfigs = mkOption {
         description = "Extra channel configurations";
         type = types.lines;

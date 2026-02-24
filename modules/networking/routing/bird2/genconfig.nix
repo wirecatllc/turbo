@@ -303,6 +303,7 @@ rec {
     , table
     , routes
     , importFilter
+    , preference
     , config
     , extraChannelConfigs
     , ...
@@ -310,6 +311,7 @@ rec {
     let
       compDescription = if description == null then "${name} static routes" else description;
       compRoutes = concatStringsSep "\n" (map (r: "route ${r};") routes);
+      compPreference = if preference == null then 65535 else preference;
       compImportFilter = renderFilter ''
         static_protocol_filter();
       ''
@@ -321,7 +323,7 @@ rec {
         ${protocol} {
           ${lib.optionalString (table != null) "table ${table};"}
           ${extraChannelConfigs}
-          preference 65535;
+          preference ${toString compPreference};
           import filter {
             ${compImportFilter}
           };
