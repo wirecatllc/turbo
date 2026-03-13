@@ -228,6 +228,17 @@ let
         default = null;
         type = types.nullOr types.str;
       };
+      passwordFile = mkOption {
+        description = ''
+          Path to file containing OSPF password.
+
+          Generates BIRD's "password from" directive to read
+          the password at runtime instead of embedding it in config.
+          Mutually exclusive with `password`.
+        '';
+        default = null;
+        type = types.nullOr types.str;
+      };
       extraConfigs = mkOption {
         description = "Extra area configurations";
         type = types.str;
@@ -571,6 +582,17 @@ in
   };
 
   config = mkIf cfg.enable {
+    assertions =
+      let
+        ospfInterfaces = lib.concatMap
+          (prot: lib.concatMap (area: lib.attrValues area.interfaces) (lib.attrValues prot.areas))
+          (lib.attrValues cfg.ospfProtocols);
+      in
+      map (iface: {
+        assertion = !(iface.password != null && iface.passwordFile != null);
+        message = "BIRD2: password and passwordFile are mutually exclusive for OSPF interfaces";
+      }) ospfInterfaces;
+
     environment.systemPackages = [
       cfg.birdPackage
     ];

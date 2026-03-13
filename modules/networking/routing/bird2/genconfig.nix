@@ -401,6 +401,7 @@ rec {
     , cost
     , authentication
     , password
+    , passwordFile
     , extraConfigs
     }:
     let
@@ -411,9 +412,11 @@ rec {
       compStub = if stub then "stub;" else "";
       compAuthentication =
         if authentication == null then
-          (if password == null then "" else "authentication cryptographic;")
+          (if password == null && passwordFile == null then "" else "authentication cryptographic;")
         else "authentication ${authentication};";
-      compPassword = optionalField password "password \"${password}\";";
+      compPassword =
+        if passwordFile != null then ''password from "${passwordFile}";''
+        else optionalField password "password \"${password}\";";
     in
     ''
       interface ${compInterfaces} ${compInstance} {
