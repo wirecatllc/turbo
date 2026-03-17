@@ -1891,6 +1891,18 @@ null or string</p>
 <p><em><em>Default</em></em></p>
 <pre><code>null
 </code></pre>
+<h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamepasswordfile"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamepasswordfile">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.passwordFile</a></h2>
+<p>Path to a file containing a BIRD password directive,
+e.g. <code>password &quot;mysecret&quot;;</code></p>
+<p>Uses BIRD's <code>include</code> directive to include the file
+at runtime. Useful with sops-nix templates that render
+the password directive at activation time.
+Mutually exclusive with <code>password</code>.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
 <h2 id="turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamestub"><a class="header" href="#turbonetworkingroutingbird2ospfprotocolsnameareasnameinterfacesnamestub">turbo.networking.routing.bird2.ospfProtocols.&lt;name&gt;.areas.&lt;name&gt;.interfaces.&lt;name&gt;.stub</a></h2>
 <p>Stub interface</p>
 <p><em><em>Type</em></em>:
