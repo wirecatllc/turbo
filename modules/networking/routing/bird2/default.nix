@@ -230,10 +230,12 @@ let
       };
       passwordFile = mkOption {
         description = ''
-          Path to file containing OSPF password.
+          Path to a file containing a BIRD password directive,
+          e.g. `password "mysecret";`
 
-          Generates BIRD's "password from" directive to read
-          the password at runtime instead of embedding it in config.
+          Uses BIRD's `include` directive to include the file
+          at runtime. Useful with sops-nix templates that render
+          the password directive at activation time.
           Mutually exclusive with `password`.
         '';
         default = null;
@@ -599,7 +601,20 @@ in
 
     # bird.conf will change whenever bird2-config or nodeConf
     # is updated
-    environment.etc."bird.conf".source = pkgs.runCommandLocal "validated-bird2.conf"
+    environment.etc."bird.conf".source =
+      let
+        # Collect all passwordFile paths from OSPF interfaces for build-time dummy creation
+        allPasswordFiles = lib.filter (p: p != null) (lib.concatMap
+          (prot: lib.concatMap
+            (area: map (iface: iface.passwordFile) (lib.attrValues area.interfaces))
+            (lib.attrValues prot.areas))
+          (lib.attrValues cfg.ospfProtocols));
+        # Generate sed expressions to rewrite runtime paths to build-time dummy paths
+        sedExprs = lib.concatStringsSep " " (map (path:
+          ''-e 's|include "${path}"|include "'"$TMPDIR"'/dummy-password.conf"|g' ''
+        ) allPasswordFiles);
+      in
+      pkgs.runCommandLocal "validated-bird2.conf"
       {
         rawConfig = ''
           include "${nodeConf}";
@@ -613,7 +628,19 @@ in
         '';
       } ''
       echo "$rawConfig" > $out
-      ${cfg.birdPackage}/bin/bird -pc $out
+      ${lib.optionalString (allPasswordFiles != []) ''
+        # Create dummy password include file and validate a patched copy (keep $out pristine)
+        echo 'password "dummy-build-check";' > "$TMPDIR/dummy-password.conf"
+        cp ${ospfConf} "$TMPDIR/ospf-patched.conf"
+        chmod +w "$TMPDIR/ospf-patched.conf"
+        ${pkgs.gnused}/bin/sed -i ${sedExprs} "$TMPDIR/ospf-patched.conf"
+        cp $out "$TMPDIR/validate.conf"
+        ${pkgs.gnused}/bin/sed -i 's|include "${ospfConf}"|include "'"$TMPDIR"'/ospf-patched.conf"|g' "$TMPDIR/validate.conf"
+        ${cfg.birdPackage}/bin/bird -pc "$TMPDIR/validate.conf"
+      ''}
+      ${lib.optionalString (allPasswordFiles == []) ''
+        ${cfg.birdPackage}/bin/bird -pc $out
+      ''}
     '';
 
     turbo.networking.firewall.filterInputRules = [

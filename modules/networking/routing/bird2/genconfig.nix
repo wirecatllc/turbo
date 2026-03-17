@@ -415,7 +415,7 @@ rec {
           (if password == null && passwordFile == null then "" else "authentication cryptographic;")
         else "authentication ${authentication};";
       compPassword =
-        if passwordFile != null then ''password from "${passwordFile}";''
+        if passwordFile != null then ''include "${passwordFile}";''
         else optionalField password "password \"${password}\";";
     in
     ''
