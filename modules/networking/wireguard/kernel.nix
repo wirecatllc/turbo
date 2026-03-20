@@ -26,7 +26,9 @@ let
       };
       extraConfig = ''
         [WireGuard]
-        PrivateKey=${tunnel.privateKey}
+        ${if tunnel.privateKeyFile != null
+          then "PrivateKeyFile=${tunnel.privateKeyFile}"
+          else "PrivateKey=${tunnel.privateKey}"}
         ListenPort=${toString tunnel.listenPort}
         FirewallMark=${toString tunnel.fwMark}
 

@@ -11,9 +11,18 @@ let
     options = {
       privateKey = lib.mkOption {
         description = ''
-          Our private key
+          Our private key (inline). Mutually exclusive with privateKeyFile.
         '';
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
+      };
+      privateKeyFile = lib.mkOption {
+        description = ''
+          Path to a file containing the private key. Mutually exclusive with privateKey.
+          Preferred over privateKey as it avoids storing the key in the Nix store.
+        '';
+        type = types.nullOr types.str;
+        default = null;
       };
       listenPort = lib.mkOption {
         description = ''
