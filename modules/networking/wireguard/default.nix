@@ -21,6 +21,7 @@ let
           Path to a file containing the private key. Mutually exclusive with privateKey.
           Preferred over privateKey as it avoids storing the key in the Nix store.
         '';
+        # types.str intentional: types.path would copy the key into the Nix store
         type = types.nullOr types.str;
         default = null;
       };
@@ -85,6 +86,14 @@ in
     ./kernel.nix
     ./userspace.nix
   ];
+  config = {
+    assertions = lib.concatLists (lib.mapAttrsToList (name: tunnel: [
+      {
+        assertion = (tunnel.privateKey != null) != (tunnel.privateKeyFile != null);
+        message = "wireguard tunnel '${name}': exactly one of privateKey or privateKeyFile must be set.";
+      }
+    ]) cfg.tunnels);
+  };
   options = {
     turbo.networking.wireguard = {
       backend = lib.mkOption {
