@@ -19,7 +19,7 @@ let
       peers = map renderPeer tunnel.peers;
     in
     {
-      inherit (tunnel) privateKey listenPort;
+      inherit (tunnel) privateKey privateKeyFile listenPort;
       table = "off";
 
       postUp = ''
