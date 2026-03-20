@@ -2166,9 +2166,20 @@ unsigned integer, meaning &gt;=0</p>
 <p><em><em>Type</em></em>:
 string</p>
 <h2 id="turbonetworkingwireguardtunnelsnameprivatekey"><a class="header" href="#turbonetworkingwireguardtunnelsnameprivatekey">turbo.networking.wireguard.tunnels.&lt;name&gt;.privateKey</a></h2>
-<p>Our private key</p>
+<p>Our private key (inline). Mutually exclusive with privateKeyFile.</p>
 <p><em><em>Type</em></em>:
-string</p>
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
+<h2 id="turbonetworkingwireguardtunnelsnameprivatekeyfile"><a class="header" href="#turbonetworkingwireguardtunnelsnameprivatekeyfile">turbo.networking.wireguard.tunnels.&lt;name&gt;.privateKeyFile</a></h2>
+<p>Path to a file containing the private key. Mutually exclusive with privateKey.
+Preferred over privateKey as it avoids storing the key in the Nix store.</p>
+<p><em><em>Type</em></em>:
+null or string</p>
+<p><em><em>Default</em></em></p>
+<pre><code>null
+</code></pre>
 
                     </main>
 
