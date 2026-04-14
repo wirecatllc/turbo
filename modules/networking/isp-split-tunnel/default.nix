@@ -24,41 +24,54 @@ in
       };
     };
   };
-  config = lib.mkIf cfg.enable (
-    let
-      genTable = address: {
-        # FIXME: This is bad when we want to add other fwmarks...
-        mangle.chains.output.prepends = lib.optional (address != null) ''
-          CONNMARK restore-mark;
-          mod mark mark ! 0 ACCEPT;
-          saddr ${address} MARK set-mark 0x1;
-          CONNMARK save-mark;
-        '';
-        mangle.chains.input.prepends = lib.optional (address != null) ''
-          CONNMARK restore-mark;
-          mod mark mark ! 0 ACCEPT;
-          interface ${cfg.interface} daddr ${address} MARK set-mark 0x1;
-          CONNMARK save-mark;
-        '';
-      };
-    in
-    {
-      # IPv4
-      turbo.networking.firewall.ip = genTable cfg.v4;
-      turbo.networking.firewall.ip6 = genTable cfg.v6;
+  config = lib.mkIf cfg.enable {
+    networking.nftables.tables."wirecat-connmark4" = lib.mkIf (cfg.v4 != null) {
+      family = "ip";
+      content = ''
+        chain output {
+          type route hook output priority mangle;
+          ct mark != 0 meta mark set ct mark accept
+          ip saddr ${cfg.v4} meta mark set 0x1
+          ct mark set meta mark
+        }
+        chain input-mark {
+          type filter hook input priority mangle;
+          ct mark != 0 meta mark set ct mark accept
+          iifname "${cfg.interface}" ip daddr ${cfg.v4} meta mark set 0x1
+          ct mark set meta mark
+        }
+      '';
+    };
 
-      systemd.network.networks."${cfg.interface}" = {
-        name = cfg.interface;
-        routingPolicyRules = [
-          {
-            routingPolicyRuleConfig = {
-              Family = "both";
-              FirewallMark = 1;
-              Table = 1;
-            };
-          }
-        ];
-      };
-    }
-  );
+    networking.nftables.tables."wirecat-connmark6" = lib.mkIf (cfg.v6 != null) {
+      family = "ip6";
+      content = ''
+        chain output {
+          type route hook output priority mangle;
+          ct mark != 0 meta mark set ct mark accept
+          ip6 saddr ${cfg.v6} meta mark set 0x1
+          ct mark set meta mark
+        }
+        chain input-mark {
+          type filter hook input priority mangle;
+          ct mark != 0 meta mark set ct mark accept
+          iifname "${cfg.interface}" ip6 daddr ${cfg.v6} meta mark set 0x1
+          ct mark set meta mark
+        }
+      '';
+    };
+
+    systemd.network.networks."${cfg.interface}" = {
+      name = cfg.interface;
+      routingPolicyRules = [
+        {
+          routingPolicyRuleConfig = {
+            Family = "both";
+            FirewallMark = 1;
+            Table = 1;
+          };
+        }
+      ];
+    };
+  };
 }

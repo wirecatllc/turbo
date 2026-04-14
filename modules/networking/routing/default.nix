@@ -152,7 +152,6 @@ in
     };
 
     networking.firewall.enable = false;
-    turbo.networking.firewall.enable = true;
 
     environment.systemPackages = with pkgs; [
       # Some network utilities
