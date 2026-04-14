@@ -643,19 +643,14 @@ in
       ''}
     '';
 
-    turbo.networking.firewall.filterInputRules = [
-      {
-        proto = "tcp";
-        dport = "bgp";
-        action = "ACCEPT";
+    networking.nftables.tables."wirecat-filter".content = ''
+      chain input {
+        tcp dport 179 accept
+        ${lib.concatMapStringsSep "\n    " (i:
+          ''iifname "${i}" meta l4proto 89 accept''
+        ) ospfAdvInterfaces}
       }
-    ] ++ (map
-      (i: {
-        proto = 89;
-        interface = i;
-        action = "ACCEPT";
-      })
-      ospfAdvInterfaces);
+    '';
 
     systemd.services.bird2 = {
       wantedBy = [ "multi-user.target" ];

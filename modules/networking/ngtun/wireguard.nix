@@ -70,11 +70,6 @@ let
       ];
     };
 
-  renderFirewall = name: tunnel: {
-    proto = "udp";
-    dport = tunnel.listenPort;
-    action = "ACCEPT";
-  };
 in
 {
   config = lib.mkIf cfg.enable {
@@ -83,6 +78,12 @@ in
 
     turbo.networking.wireguard.tunnels = lib.mapAttrs renderTunnel cfg.generatedTunnels;
 
-    turbo.networking.firewall.filterInputRules = lib.mapAttrsToList renderFirewall cfg.generatedTunnels;
+    networking.nftables.tables."wirecat-filter".content = ''
+      chain input {
+        ${lib.concatStringsSep "\n    " (lib.mapAttrsToList (name: tunnel:
+          ''udp dport ${toString tunnel.listenPort} accept''
+        ) cfg.generatedTunnels)}
+      }
+    '';
   };
 }
