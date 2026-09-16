@@ -1,0 +1,21 @@
+name: Check hypervisor library
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  hypervisor-library:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3.0.2
+      - uses: cachix/install-nix-action@v17
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+      - name: Check library
+        run: >-
+          nix build --no-link -L
+          .#checks.x86_64-linux.hypervisor-cloud-init
+          .#checks.x86_64-linux.hypervisor-api
