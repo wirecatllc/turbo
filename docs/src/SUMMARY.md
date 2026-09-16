@@ -1,6 +1,7 @@
 # Summary
 
 - [Introduction](./introduction.md)
+- [Hypervisor library](./hypervisor-library.md)
 - [Reference](./reference/index.md)
     - [Networking](./reference/networking.md)
     - [Storage](./reference/storage.md)

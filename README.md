@@ -61,6 +61,12 @@ After some time we believe that community might find it useful and save some dup
 }
 ```
 
+## Hypervisor library
+
+Use `turbo.lib.hypervisor { inherit pkgs; }` for cloud-init seed ISOs, pinned VM
+images, and NixOS installers. See the [library guide](docs/src/hypervisor-library.md)
+for usage and the staged migration plan from infra.
+
 ## Docs
 
 Right now it is still under heavy construction. Check out the latest here: https://wirecatllc.github.io/turbo/unstable/

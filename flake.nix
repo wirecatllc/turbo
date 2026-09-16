@@ -60,6 +60,10 @@
                   inherit optionsMd;
                 };
             };
+          checks = import ./tests/hypervisor.nix {
+            inherit pkgs;
+            hypervisor = self.lib.hypervisor;
+          };
           # Dev Shell
           devShell = nixpkgs.legacyPackages.${system}.mkShell {
             buildInputs = [
@@ -67,6 +71,7 @@
             ];
           };
         }) // {
+      lib = import ./lib;
       inherit nixosModules;
       nixosModule = ./modules;
     };
