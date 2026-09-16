@@ -76,7 +76,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="reference/index.html"><strong aria-hidden="true">2.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/networking.html"><strong aria-hidden="true">2.1.</strong> Networking</a></li><li class="chapter-item expanded "><a href="reference/storage.html"><strong aria-hidden="true">2.2.</strong> Storage</a></li><li class="chapter-item expanded "><a href="reference/virtualization.html"><strong aria-hidden="true">2.3.</strong> Virtualization</a></li></ol></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded "><a href="introduction.html"><strong aria-hidden="true">1.</strong> Introduction</a></li><li class="chapter-item expanded "><a href="hypervisor-library.html"><strong aria-hidden="true">2.</strong> Hypervisor library</a></li><li class="chapter-item expanded "><a href="reference/index.html"><strong aria-hidden="true">3.</strong> Reference</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="reference/networking.html"><strong aria-hidden="true">3.1.</strong> Networking</a></li><li class="chapter-item expanded "><a href="reference/storage.html"><strong aria-hidden="true">3.2.</strong> Storage</a></li><li class="chapter-item expanded "><a href="reference/virtualization.html"><strong aria-hidden="true">3.3.</strong> Virtualization</a></li></ol></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -142,6 +142,112 @@
 <ul>
 <li><a href="https://github.com/wirecatllc/turbo">GitHub</a></li>
 </ul>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="hypervisor-library"><a class="header" href="#hypervisor-library">Hypervisor library</a></h1>
+<p>Turbo exports VM image and installer helpers independently of its NixOS modules:</p>
+<pre><code class="language-nix">let
+  library = turbo.lib.hypervisor { inherit pkgs; };
+in {
+  # Example values for a consumer's VM configuration:
+  diskImage = library.qcow2.debian_13_trixie_genericcloud;
+  seedImage = library.cloud-config {
+    meta_data = &quot;instance-id: example-vm\nlocal-hostname: example-vm\n&quot;;
+    user_data = ''
+      #cloud-config
+      users:
+        - name: operator
+          ssh_authorized_keys:
+            - ssh-ed25519 AAAA...replace-with-your-public-key
+    '';
+    network_config = ''
+      version: 2
+      ethernets:
+        eth0:
+          dhcp4: true
+    '';
+  };
+}
+</code></pre>
+<p>For a non-flake import, use <code>(import /path/to/turbo/lib).hypervisor { inherit pkgs; }</code>.
+The caller supplies <code>pkgs</code>, so helpers use the caller's nixpkgs revision, overlays,
+and build platform. Importing the library neither enables services nor downloads
+images. There is no overlay or NixOS module argument to configure.</p>
+<h2 id="cloud-init-seed-images"><a class="header" href="#cloud-init-seed-images">Cloud-init seed images</a></h2>
+<p><code>cloud-config { user_data; meta_data ? &quot;&quot;; network_config ? null; }</code> returns an ISO
+file derivation labeled <code>cidata</code>, following the
+<a href="https://docs.cloud-init.io/en/latest/reference/datasources/nocloud.html">NoCloud format</a>.
+Inputs are strings containing the already serialized configuration. <code>user-data</code>
+and <code>meta-data</code> are always present; <code>network-config</code> is omitted when null and is
+included even when an explicitly supplied string is empty. Supply a unique
+<code>instance-id</code> in metadata when provisioning a VM.</p>
+<p><code>cloud-installer { user_data; }</code> is shorthand for a seed with empty metadata and
+no network configuration. Both helpers preserve input bytes, including trailing
+newlines, and support large payloads without passing them in environment variables.
+They package data without validating the guest's cloud-init schema.</p>
+<p>These derivations put their contents in the Nix store. Do not put private keys,
+passwords, or other secrets in them.</p>
+<h2 id="image-catalog"><a class="header" href="#image-catalog">Image catalog</a></h2>
+<p>The <code>qcow2</code>, <code>drivers</code>, and <code>isos</code> attribute sets carry the public image pins from
+infra's hypervisor library. The catalog contains x86_64 guest media; selecting an
+ARM build platform does not turn those downloads into ARM guest images. Build
+NixOS installers with a Linux <code>pkgs</code> matching the guest architecture.</p>
+<ul>
+<li><code>qcow2</code>: Debian 10–13, Ubuntu 20.04–26.04, and MikroTik CHR 7.20.8.</li>
+<li><code>drivers.win_virtio</code>: Windows virtio drivers.</li>
+<li><code>isos</code>: Debian, Ubuntu, Alpine, CentOS, Arch, netboot.xyz, and rescue media in
+<code>isos.livecd</code>.</li>
+</ul>
+<p>Release versions and download pins are retained for migration compatibility.
+CHR pins the downloaded ZIP and converts it in a separate derivation, so a
+change in the caller's QEMU version does not cause a fixed-output hash mismatch.
+The corrected name
+<code>qcow2.debian_11_bullseye_genericcloud</code> also has the original
+<code>debian_11_bulleye_genericcloud</code> alias. Despite its historical name,
+<code>debian_13_trixie_genericcloud</code> retains infra's Debian 13 <strong>generic</strong> image.
+<code>isos.archlinux</code> retains the curried <code>date: sha1: ...</code> API.</p>
+<p>Historical pins are not recommendations of current or supported operating
+systems. Some upstreams remove old releases or replace files at mutable URLs
+(including <code>win_virtio</code>, <code>netbootxyz</code>, and <code>archlinux_latest</code>). Hashes prevent
+silently accepting changed content, but a download may fail. This migration does
+not refresh the catalog or require downloading it during checks.</p>
+<h2 id="nixos-installer"><a class="header" href="#nixos-installer">NixOS installer</a></h2>
+<p><code>isos.nixos extraConfig</code> accepts a NixOS module (an attribute set, function, or
+module path) and returns the store path of the ISO file, retaining its derivation
+context. It includes the minimal installer and channel modules, with documentation
+disabled by default. Caller settings can override these defaults.</p>
+<pre><code class="language-nix">library.isos.nixos ({ lib, ... }: {
+  image.baseName = lib.mkForce &quot;rescue&quot;;
+  services.openssh.enable = true;
+  users.users.root.openssh.authorizedKeys.keys = [
+    &quot;ssh-ed25519 AAAA...replace-with-your-public-key&quot;
+  ];
+})
+</code></pre>
+<p>On older nixpkgs (including Turbo's own pin), set <code>isoImage.isoName = lib.mkForce &quot;rescue.iso&quot;</code> instead. The path comes from the evaluated NixOS
+configuration, including the <code>.zst</code> suffix when <code>isoImage.compressImage</code> is true.
+Turbo includes no operator keys or organization specific access policy.</p>
+<h2 id="migration-plan"><a class="header" href="#migration-plan">Migration plan</a></h2>
+<ol>
+<li>Land the Turbo library and its checks. Existing infra consumers remain unchanged.</li>
+<li>Update infra's Turbo lock and replace each local library import with
+<code>turbo.lib.hypervisor { inherit pkgs; }</code>, passing the Turbo input to modules as
+needed. Existing <code>cloud-config</code>, image, and <code>isos.nixos</code> expressions can stay.</li>
+<li>Keep infra's <code>isos.nixos-wirecat</code> preset and the privately hosted <code>windows_7</code>
+and <code>windows_2012</code> images in a local wrapper. Extend Turbo's <code>isos</code> attribute set
+with these values, using <code>library.isos.nixos</code> for the Wirecat installer.</li>
+<li>Evaluate affected VM definitions and build representative seed images before
+removing the shared implementation from infra.</li>
+</ol>
+<p>The cloud-init helpers no longer append an extra newline to input. Existing Nix
+multiline YAML strings work unchanged; callers needing a trailing newline must
+include it. The NixOS helper now returns the configured ISO filename rather than
+guessing it from the derivation name.</p>
+<h2 id="checks"><a class="header" href="#checks">Checks</a></h2>
+<p>Run on Linux or with a Linux remote builder:</p>
+<pre><code class="language-console">nix build .#checks.x86_64-linux.hypervisor-cloud-init .#checks.x86_64-linux.hypervisor-api
+</code></pre>
+<p>The first check reads real ISO contents, including a large payload and both
+optional-network cases. The second evaluates the catalog and NixOS filename
+handling without fetching the guest images or building an installer.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="this-is-the-api-for-each-of-the-options-available-in-the-module"><a class="header" href="#this-is-the-api-for-each-of-the-options-available-in-the-module">This is the API for each of the options available in the module</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="network-options"><a class="header" href="#network-options">Network Options</a></h1>
 <!--
