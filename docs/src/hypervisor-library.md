@@ -68,7 +68,9 @@ change in the caller's QEMU version does not cause a fixed-output hash mismatch.
 The corrected name
 `qcow2.debian_11_bullseye_genericcloud` also has the original
 `debian_11_bulleye_genericcloud` alias. Despite its historical name,
-`debian_13_trixie_genericcloud` retains infra's Debian 13 **generic** image.
+`debian_13_trixie_genericcloud` retains infra's original Debian 13 **generic** image.
+For the newer Debian 13 **generic** build `20261116-2664`, use
+`qcow2.debian_13_trixie_generic_20261116`.
 `isos.archlinux` retains the curried `date: sha1: ...` API.
 
 Historical pins are not recommendations of current or supported operating

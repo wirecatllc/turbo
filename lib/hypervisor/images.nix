@@ -6,6 +6,12 @@ let
 in
 {
   qcow2 = rec {
+    # The generic kernel includes a broader set of drivers, including virtiofs.
+    debian_13_trixie_generic_20261116 = fetchurl {
+      url = "https://cloud.debian.org/images/cloud/trixie/20261116-2664/debian-13-generic-amd64-20261116-2664.qcow2";
+      hash = "sha512-5TqT7zP4KM7tDnJ4wswnU73H1QmPv64VvWS22HjbNQ6jdEJHdjocjstrQBmg9iPDjK9gOK1vnDV/tOAUk93xow==";
+    };
+
     debian_13_trixie_genericcloud = fetchurl {
       sha256 = "sha256-JLdsclUV2vI+qt5DI+daGPU4SXHpTMeBxVHFJLuxNNA=";
       url = "https://cloud.debian.org/images/cloud/trixie/20260402-2435/debian-13-generic-amd64-20260402-2435.qcow2";
